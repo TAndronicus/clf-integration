@@ -3,7 +3,7 @@ package data;
 import lombok.Data;
 
 @Data
-public class Tuple {
+public class ScoreTuple {
 
     private double[] scores;
     private double[] weights;

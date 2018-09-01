@@ -2,14 +2,16 @@ package validator;
 
 import config.Opts;
 import data.Dataset;
-import data.Tuple;
+import data.ScoreTuple;
 import de.bwaldvogel.liblinear.Model;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class SimpleScoreValidator implements Validator{
     @Override
-    public Tuple validate(List<? extends Model> clfs, Dataset dataset, Opts opts) {
+    public ScoreTuple validate(List<? extends Model> clfs, Dataset dataset, Opts opts) {
         return null;
     }
 }

@@ -1,7 +1,11 @@
 package integrator;
 
+import config.Opts;
+import data.ClfTuple;
+
+@FunctionalInterface
 public interface Integrator {
 
-    double integrate
+    double integrateScore(ClfTuple clfTuple, Opts opts);
 
 }
