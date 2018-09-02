@@ -1,9 +1,9 @@
-package validator;
+package jb.validator;
 
-import config.Opts;
-import data.Dataset;
-import data.ScoreTuple;
 import de.bwaldvogel.liblinear.Model;
+import jb.config.Opts;
+import jb.data.Dataset;
+import jb.data.ScoreTuple;
 
 import java.util.List;
 

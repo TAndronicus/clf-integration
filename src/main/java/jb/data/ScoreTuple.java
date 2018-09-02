@@ -1,4 +1,4 @@
-package data;
+package jb.data;
 
 import lombok.Data;
 

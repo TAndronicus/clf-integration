@@ -1,7 +1,7 @@
-package integrator;
+package jb.integrator;
 
-import config.Opts;
-import data.ClfTuple;
+import jb.config.Opts;
+import jb.data.ClfTuple;
 
 @FunctionalInterface
 public interface Integrator {

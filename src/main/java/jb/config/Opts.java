@@ -1,4 +1,4 @@
-package config;
+package jb.config;
 
 import lombok.Data;
 

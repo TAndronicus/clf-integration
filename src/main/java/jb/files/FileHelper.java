@@ -1,7 +1,7 @@
-package files;
+package jb.files;
 
-import data.Dataset;
 import de.bwaldvogel.liblinear.InvalidInputDataException;
+import jb.data.Dataset;
 
 import java.io.IOException;
 

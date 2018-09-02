@@ -1,10 +1,8 @@
-package integrator;
+package jb.integrator;
 
-import config.Opts;
-import data.ClfTuple;
-import org.springframework.stereotype.Component;
+import jb.config.Opts;
+import jb.data.ClfTuple;
 
-@Component
 public class MeanIntegrator implements Integrator{
     @Override
     public double integrateScore(ClfTuple clfTuple, Opts opts) {

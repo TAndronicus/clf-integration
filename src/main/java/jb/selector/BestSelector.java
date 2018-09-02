@@ -1,14 +1,12 @@
-package selector;
+package jb.selector;
 
-import config.Opts;
-import data.ClfTuple;
-import data.ScoreTuple;
 import de.bwaldvogel.liblinear.Model;
-import org.springframework.stereotype.Component;
+import jb.config.Opts;
+import jb.data.ClfTuple;
+import jb.data.ScoreTuple;
 
 import java.util.List;
 
-@Component
 public class BestSelector implements Selector{
 
     @Override
