@@ -2,6 +2,7 @@ package jb;
 
 import de.bwaldvogel.liblinear.InvalidInputDataException;
 import de.bwaldvogel.liblinear.Model;
+import de.bwaldvogel.liblinear.SolverType;
 import jb.config.Opts;
 import jb.data.ClfTuple;
 import jb.data.Dataset;
@@ -34,6 +35,12 @@ public class Runner {
         Opts opts = new Opts();
         opts.setFilename("/home/jb/Downloads/data3.txt");
         opts.setBias(1);
+        opts.setNumberOfBaseClassifiers(3);
+        opts.setNumberOfSelectedClassifiers(2);
+        opts.setNumberOfSpaceParts(3);
+        opts.setSolverType(SolverType.L2R_LR);
+        opts.setC(1);
+        opts.setEps(.01);
         Dataset dataset = fileHelper.readFile(opts);
         List<Model> clfs = trainer.train(dataset, opts);
         ScoreTuple scoreTuple = validator.validate(clfs, dataset, opts);

@@ -7,13 +7,23 @@ import jb.data.Dataset;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileReaderSameDataset implements FileHelper{
 
     @Override
     public Dataset readFile(Opts opts) throws IOException, InvalidInputDataException {
         Problem problem = Problem.readFromFile(new File(opts.getFilename()), 1);
-        return new Dataset(problem, problem, problem);
+        List<Problem> trainingProblems = new ArrayList<>();
+        for (int i = 0; i < opts.getNumberOfBaseClassifiers(); i++) {
+            trainingProblems.add(problem);
+        }
+        List<Problem> validatingProblems = new ArrayList<>();
+        for (int i = 0; i < opts.getNumberOfSpaceParts(); i++) {
+            validatingProblems.add(problem);
+        }
+        return new Dataset(trainingProblems, validatingProblems, problem);
     }
 
 }
