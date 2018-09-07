@@ -22,11 +22,11 @@ import java.util.List;
 
 public class Runner {
 
-    FileHelper fileHelper = new FileReader10Way();
-    Trainer trainer = new SVMTrainer();
-    Validator validator = new SimpleScoreValidator();
-    Selector selector = new BestSelector();
-    Integrator integrator = new MeanIntegrator();
+    static FileHelper fileHelper = new FileReader10Way();
+    static Trainer trainer = new SVMTrainer();
+    static Validator validator = new SimpleScoreValidator();
+    static Selector selector = new BestSelector();
+    static Integrator integrator = new MeanIntegrator();
 
     public static void main(String[] args) throws IOException, InvalidInputDataException {
 
@@ -36,6 +36,7 @@ public class Runner {
         ScoreTuple scoreTuple = validator.validate(clfs, dataset, opts);
         ClfTuple clfTuple = selector.select(clfs, scoreTuple, opts);
         double score = integrator.integrateScore(clfTuple, opts);
+        System.out.println(score);
 
     }
 }
