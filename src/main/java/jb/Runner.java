@@ -8,6 +8,7 @@ import jb.data.Dataset;
 import jb.data.ScoreTuple;
 import jb.files.FileHelper;
 import jb.files.FileReader10Way;
+import jb.files.FileReaderSameDataset;
 import jb.integrator.Integrator;
 import jb.integrator.MeanIntegrator;
 import jb.selector.BestSelector;
@@ -22,7 +23,7 @@ import java.util.List;
 
 public class Runner {
 
-    static FileHelper fileHelper = new FileReader10Way();
+    static FileHelper fileHelper = new FileReaderSameDataset();
     static Trainer trainer = new SVMTrainer();
     static Validator validator = new SimpleScoreValidator();
     static Selector selector = new BestSelector();
@@ -31,7 +32,9 @@ public class Runner {
     public static void main(String[] args) throws IOException, InvalidInputDataException {
 
         Opts opts = new Opts();
-        Dataset dataset = fileHelper.readFile("");
+        opts.setFilename("/home/jb/Downloads/data3.txt");
+        opts.setBias(1);
+        Dataset dataset = fileHelper.readFile(opts);
         List<Model> clfs = trainer.train(dataset, opts);
         ScoreTuple scoreTuple = validator.validate(clfs, dataset, opts);
         ClfTuple clfTuple = selector.select(clfs, scoreTuple, opts);
