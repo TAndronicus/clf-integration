@@ -42,7 +42,6 @@ public class FileReaderNWay implements FileHelper {
             baseProblem.y = y;
             baseProblem.n = problem.n;
             baseProblem.l = countOfSubset;
-            trainingProblems.add(baseProblem);
             if (i == numberOfSubsets - 1) {
                 testingProblem = baseProblem;
             } else if (i == numberOfSubsets - 2) {

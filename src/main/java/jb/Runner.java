@@ -33,7 +33,7 @@ public class Runner {
     public static void main(String[] args) throws IOException, InvalidInputDataException {
 
         Opts opts = new Opts();
-        opts.setFilename("/home/jb/Downloads/data3.txt");
+        opts.setFilename("/home/jb/Downloads/test0.txt");
         opts.setBias(1);
         opts.setNumberOfBaseClassifiers(3);
         opts.setNumberOfSelectedClassifiers(2);
