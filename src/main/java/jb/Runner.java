@@ -8,7 +8,7 @@ import jb.data.ClfTuple;
 import jb.data.Dataset;
 import jb.data.ScoreTuple;
 import jb.files.FileHelper;
-import jb.files.FileReader10Way;
+import jb.files.FileReaderNWay;
 import jb.files.FileReaderSameDataset;
 import jb.integrator.Integrator;
 import jb.integrator.MeanIntegrator;
@@ -24,7 +24,7 @@ import java.util.List;
 
 public class Runner {
 
-    static FileHelper fileHelper = new FileReaderSameDataset();
+    static FileHelper fileHelper = new FileReaderNWay();
     static Trainer trainer = new SVMTrainer();
     static Validator validator = new SimpleScoreValidator();
     static Selector selector = new BestSelector();
