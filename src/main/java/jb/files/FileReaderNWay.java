@@ -3,75 +3,99 @@ package jb.files;
 import de.bwaldvogel.liblinear.Feature;
 import de.bwaldvogel.liblinear.InvalidInputDataException;
 import de.bwaldvogel.liblinear.Problem;
+import jb.config.Constants;
 import jb.config.Opts;
-import jb.data.ClfObject;
+import jb.data.ClfObjectDoubleSorted;
 import jb.data.Dataset;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-public class FileReaderNWay implements FileHelper{
+public class FileReaderNWay implements FileHelper {
 
     @Override
     public Dataset readFile(Opts opts) throws IOException, InvalidInputDataException {
 
         Problem problem = Problem.readFromFile(new File(opts.getFilename()), opts.getBias());
-        ClfObject[] clfObjects = getClfObjects(problem);
+        ClfObjectDoubleSorted[] clfObjectDoubleSorteds = getClfObjects(problem);
 
         int numberOfSubsets = opts.getNumberOfBaseClassifiers() + 2;
         int countOfSubset = problem.l / (numberOfSubsets);
+
         List<Problem> trainingProblems = new ArrayList<>();
         List<Problem> validatingProblems = new ArrayList<>();
         Problem testingProblem = null;
-        ExtremeValues extremeValues = new ExtremeValues(clfObjects).invoke();
+
+        int[] countOfValidatingObjects = new int[opts.getNumberOfSpaceParts()];
+        Queue<ClfObjectDoubleSorted> queue = new LinkedList<>();
+
+        ExtremeValues extremeValues = new ExtremeValues(clfObjectDoubleSorteds).invoke();
         double minX = extremeValues.getMinX();
         double maxX = extremeValues.getMaxX();
-        
+
         for (int i = 0; i < numberOfSubsets; i++) {
-            Feature[][] x = new Feature[countOfSubset][problem.n];
-            double[] y = new double[countOfSubset];
-            for (int j = 0; j < countOfSubset; j++) {
-                x[j] = clfObjects[j * numberOfSubsets + i].getX();
-                y[j] = clfObjects[j * numberOfSubsets + i].getY();
+            if (i != numberOfSubsets - 2) {
+                Feature[][] x = new Feature[countOfSubset][problem.n];
+                double[] y = new double[countOfSubset];
+                for (int j = 0; j < countOfSubset; j++) {
+                    x[j] = clfObjectDoubleSorteds[j * numberOfSubsets + i].getX();
+                    y[j] = clfObjectDoubleSorteds[j * numberOfSubsets + i].getY();
+                }
+                Problem baseProblem = new Problem();
+                baseProblem.bias = opts.getBias();
+                baseProblem.x = x;
+                baseProblem.y = y;
+                baseProblem.n = problem.n;
+                baseProblem.l = countOfSubset;
+                if (i == numberOfSubsets - 1) {
+                    testingProblem = baseProblem;
+                } else {
+                    trainingProblems.add(baseProblem);
+                }
+            } else {
+                for (int j = 0; j < countOfSubset; j++) {
+                    countOfValidatingObjects[(int) (opts.getNumberOfSpaceParts() * (clfObjectDoubleSorteds[j * numberOfSubsets + i].getX()[0].getValue() - minX) / (maxX - minX) - Constants.EPSILON)]++;
+                    queue.add(clfObjectDoubleSorteds[j * numberOfSubsets + i]);
+                }
+            }
+        }
+
+        for (int i = 0; i < countOfValidatingObjects.length; i++) {
+            Feature[][] x = new Feature[countOfValidatingObjects[i]][problem.n];
+            double[] y = new double[countOfValidatingObjects[i]];
+            for (int j = 0; j < countOfValidatingObjects[i]; j++) {
+                ClfObjectDoubleSorted clfObjectDoubleSorted = queue.remove();
+                x[j] = clfObjectDoubleSorted.getX();
+                y[j] = clfObjectDoubleSorted.getY();
             }
             Problem baseProblem = new Problem();
             baseProblem.bias = opts.getBias();
             baseProblem.x = x;
             baseProblem.y = y;
             baseProblem.n = problem.n;
-            baseProblem.l = countOfSubset;
-            if (i == numberOfSubsets - 1) {
-                testingProblem = baseProblem;
-            } else if (i == numberOfSubsets - 2) {
-                for (int j = 0; j < opts.getNumberOfBaseClassifiers(); j++) {
-                    validatingProblems.add(baseProblem);
-                }
-            } else {
-                trainingProblems.add(baseProblem);
-            }
+            baseProblem.l = countOfValidatingObjects[i];
+            validatingProblems.add(baseProblem);
         }
         return new Dataset(trainingProblems, validatingProblems, testingProblem, minX, maxX);
     }
 
-    private ClfObject[] getClfObjects(Problem problem) {
-        ClfObject[] clfObjects = new ClfObject[problem.l];
+    private ClfObjectDoubleSorted[] getClfObjects(Problem problem) {
+        ClfObjectDoubleSorted[] clfObjectDoubleSorteds = new ClfObjectDoubleSorted[problem.l];
         for (int i = 0; i < problem.l; i++) {
-            clfObjects[i] = new ClfObject(problem.x[i], problem.y[i]);
+            clfObjectDoubleSorteds[i] = new ClfObjectDoubleSorted(problem.x[i], problem.y[i]);
         }
-        Arrays.sort(clfObjects);
-        return clfObjects;
+        Arrays.sort(clfObjectDoubleSorteds);
+        return clfObjectDoubleSorteds;
     }
 
     private class ExtremeValues {
-        private ClfObject[] clfObjects;
+        private ClfObjectDoubleSorted[] clfObjectsDoubleSorted;
         private double minX;
         private double maxX;
 
-        public ExtremeValues(ClfObject... clfObjects) {
-            this.clfObjects = clfObjects;
+        public ExtremeValues(ClfObjectDoubleSorted... clfObjectsDoubleSorted) {
+            this.clfObjectsDoubleSorted = clfObjectsDoubleSorted;
         }
 
         public double getMinX() {
@@ -84,11 +108,11 @@ public class FileReaderNWay implements FileHelper{
 
         public ExtremeValues invoke() {
             int classChangeIndex = 0;
-            while(clfObjects[classChangeIndex].getY() == 0) {
+            while (clfObjectsDoubleSorted[classChangeIndex].getY() == 0) {
                 classChangeIndex++;
             }
-            minX = Math.min(clfObjects[0].getX()[0].getValue(), clfObjects[classChangeIndex].getX()[0].getValue());
-            maxX = Math.max(clfObjects[clfObjects.length - 1].getX()[0].getValue(), clfObjects[classChangeIndex - 1].getX()[0].getValue());
+            minX = Math.min(clfObjectsDoubleSorted[0].getX()[0].getValue(), clfObjectsDoubleSorted[classChangeIndex].getX()[0].getValue());
+            maxX = Math.max(clfObjectsDoubleSorted[clfObjectsDoubleSorted.length - 1].getX()[0].getValue(), clfObjectsDoubleSorted[classChangeIndex - 1].getX()[0].getValue());
             return this;
         }
     }

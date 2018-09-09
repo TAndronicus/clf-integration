@@ -52,6 +52,8 @@ public class FileReaderNWaySameValidationTest {
         // when
         FileHelper fileHelper = new FileReaderNWaySameValidation();
         Dataset dataset = fileHelper.readFile(opts);
+
+        // then
         for (int i = 0; i < dataset.getTrainingProblems().size(); i++) {
             assertThat(dataset.getTrainingProblems().get(i).y[0], is(equalTo(0.0)));
             assertThat(dataset.getTrainingProblems().get(i).y[1], is(equalTo(1.0)));

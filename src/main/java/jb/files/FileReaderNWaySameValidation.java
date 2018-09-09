@@ -1,11 +1,10 @@
 package jb.files;
 
 import de.bwaldvogel.liblinear.Feature;
-import de.bwaldvogel.liblinear.FeatureNode;
 import de.bwaldvogel.liblinear.InvalidInputDataException;
 import de.bwaldvogel.liblinear.Problem;
 import jb.config.Opts;
-import jb.data.ClfObject;
+import jb.data.ClfObjectDoubleSorted;
 import jb.data.Dataset;
 
 import java.io.File;
@@ -18,11 +17,11 @@ public class FileReaderNWaySameValidation implements FileHelper {
     public Dataset readFile(Opts opts) throws IOException, InvalidInputDataException {
 
         Problem problem = Problem.readFromFile(new File(opts.getFilename()), opts.getBias());
-        ClfObject[] clfObjects = new ClfObject[problem.l];
+        ClfObjectDoubleSorted[] clfObjectDoubleSorteds = new ClfObjectDoubleSorted[problem.l];
         for (int i = 0; i < problem.l; i++) {
-            clfObjects[i] = new ClfObject(problem.x[i], problem.y[i]);
+            clfObjectDoubleSorteds[i] = new ClfObjectDoubleSorted(problem.x[i], problem.y[i]);
         }
-        Arrays.sort(clfObjects);
+        Arrays.sort(clfObjectDoubleSorteds);
 
         int numberOfSubsets = opts.getNumberOfBaseClassifiers() + 2;
         int countOfSubset = problem.l / (numberOfSubsets);
@@ -33,8 +32,8 @@ public class FileReaderNWaySameValidation implements FileHelper {
             Feature[][] x = new Feature[countOfSubset][problem.n];
             double[] y = new double[countOfSubset];
             for (int j = 0; j < countOfSubset; j++) {
-                x[j] = clfObjects[j * numberOfSubsets + i].getX();
-                y[j] = clfObjects[j * numberOfSubsets + i].getY();
+                x[j] = clfObjectDoubleSorteds[j * numberOfSubsets + i].getX();
+                y[j] = clfObjectDoubleSorteds[j * numberOfSubsets + i].getY();
             }
             Problem baseProblem = new Problem();
             baseProblem.bias = opts.getBias();
@@ -52,7 +51,7 @@ public class FileReaderNWaySameValidation implements FileHelper {
                 trainingProblems.add(baseProblem);
             }
         }
-        return new Dataset(trainingProblems, validatingProblems, testingProblem, clfObjects[0].getX()[0].getValue(), clfObjects[clfObjects.length - 1].getX()[0].getValue());
+        return new Dataset(trainingProblems, validatingProblems, testingProblem, clfObjectDoubleSorteds[0].getX()[0].getValue(), clfObjectDoubleSorteds[clfObjectDoubleSorteds.length - 1].getX()[0].getValue());
     }
 
 }
