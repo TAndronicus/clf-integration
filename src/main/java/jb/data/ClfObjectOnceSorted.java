@@ -13,4 +13,8 @@ public class ClfObjectOnceSorted extends ClfObject {
         return Double.compare(x[0].getValue(), o.getX()[0].getValue());
     }
 
+    public ClfObjectDoubleSorted convertToDoubleSorted() {
+        return new ClfObjectDoubleSorted(this.getX(), this.getY());
+    }
+
 }

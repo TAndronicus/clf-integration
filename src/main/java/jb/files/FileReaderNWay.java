@@ -5,7 +5,9 @@ import de.bwaldvogel.liblinear.InvalidInputDataException;
 import de.bwaldvogel.liblinear.Problem;
 import jb.config.Constants;
 import jb.config.Opts;
+import jb.data.ClfObject;
 import jb.data.ClfObjectDoubleSorted;
+import jb.data.ClfObjectOnceSorted;
 import jb.data.Dataset;
 import lombok.Data;
 import lombok.NonNull;
@@ -13,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class FileReaderNWay implements FileHelper {
 
@@ -31,7 +35,7 @@ public class FileReaderNWay implements FileHelper {
         Problem testingProblem = null;
 
         int[] countOfValidatingObjects = new int[opts.getNumberOfSpaceParts()];
-        Queue<ClfObjectDoubleSorted> queue = new LinkedList<>();
+        ClfObjectOnceSorted[] clfObjectsOnceSorted = new ClfObjectOnceSorted[countOfSubset];
 
         ExtremeValues extremeValues = new ExtremeValues(clfObjectDoubleSorteds).invoke();
         double minX = extremeValues.getMinX();
@@ -59,18 +63,22 @@ public class FileReaderNWay implements FileHelper {
             } else {
                 for (int j = 0; j < countOfSubset; j++) {
                     countOfValidatingObjects[(int) (opts.getNumberOfSpaceParts() * (clfObjectDoubleSorteds[j * numberOfSubsets + i].getX()[0].getValue() - minX) / (maxX - minX) - Constants.EPSILON)]++;
-                    queue.add(clfObjectDoubleSorteds[j * numberOfSubsets + i]);
+                    clfObjectsOnceSorted[j] = clfObjectDoubleSorteds[j * numberOfSubsets + i].convertToOnceSorted();
                 }
             }
         }
+
+        Arrays.sort(clfObjectsOnceSorted);
+        int counter = 0;
 
         for (int i = 0; i < countOfValidatingObjects.length; i++) {
             Feature[][] x = new Feature[countOfValidatingObjects[i]][problem.n];
             double[] y = new double[countOfValidatingObjects[i]];
             for (int j = 0; j < countOfValidatingObjects[i]; j++) {
-                ClfObjectDoubleSorted clfObjectDoubleSorted = queue.remove();
+                ClfObject clfObjectDoubleSorted = clfObjectsOnceSorted[counter];
                 x[j] = clfObjectDoubleSorted.getX();
                 y[j] = clfObjectDoubleSorted.getY();
+                counter++;
             }
             Problem baseProblem = new Problem();
             baseProblem.bias = opts.getBias();

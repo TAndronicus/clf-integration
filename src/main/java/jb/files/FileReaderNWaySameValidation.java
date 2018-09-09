@@ -4,6 +4,7 @@ import de.bwaldvogel.liblinear.Feature;
 import de.bwaldvogel.liblinear.InvalidInputDataException;
 import de.bwaldvogel.liblinear.Problem;
 import jb.config.Opts;
+import jb.data.ClfObject;
 import jb.data.ClfObjectDoubleSorted;
 import jb.data.Dataset;
 
@@ -17,7 +18,7 @@ public class FileReaderNWaySameValidation implements FileHelper {
     public Dataset readFile(Opts opts) throws IOException, InvalidInputDataException {
 
         Problem problem = Problem.readFromFile(new File(opts.getFilename()), opts.getBias());
-        ClfObjectDoubleSorted[] clfObjectDoubleSorteds = new ClfObjectDoubleSorted[problem.l];
+        ClfObject[] clfObjectDoubleSorteds = new ClfObjectDoubleSorted[problem.l];
         for (int i = 0; i < problem.l; i++) {
             clfObjectDoubleSorteds[i] = new ClfObjectDoubleSorted(problem.x[i], problem.y[i]);
         }
