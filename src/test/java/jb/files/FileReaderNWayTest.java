@@ -1,7 +1,9 @@
 package jb.files;
 
+import de.bwaldvogel.liblinear.Feature;
 import de.bwaldvogel.liblinear.InvalidInputDataException;
 import de.bwaldvogel.liblinear.Problem;
+import jb.config.Constants;
 import jb.config.Opts;
 import jb.data.Dataset;
 import org.junit.jupiter.api.Test;
@@ -10,8 +12,6 @@ import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.lessThanOrEqualTo;
 
 public class FileReaderNWayTest {
 
@@ -87,8 +87,10 @@ public class FileReaderNWayTest {
             assertThat(dataset.getTrainingProblems().get(i).y[1], is(equalTo(1.0)));
         }
         for (int i = 0; i < dataset.getTrainingProblems().size() - 1; i++) {
-            assertThat(dataset.getTrainingProblems().get(i).x[0][0].getValue(), is(lessThanOrEqualTo(dataset.getTrainingProblems().get(i + 1).x[0][0].getValue())));
-            assertThat(dataset.getTrainingProblems().get(i).x[1][0].getValue(), is(lessThanOrEqualTo(dataset.getTrainingProblems().get(i + 1).x[1][0].getValue())));
+            assertThat(dataset.getTrainingProblems().get(i).x[0][0].getValue(),
+                    is(lessThanOrEqualTo(dataset.getTrainingProblems().get(i + 1).x[0][0].getValue())));
+            assertThat(dataset.getTrainingProblems().get(i).x[1][0].getValue(),
+                    is(lessThanOrEqualTo(dataset.getTrainingProblems().get(i + 1).x[1][0].getValue())));
             assertThat(dataset.getTrainingProblems().get(i).y[0], is(lessThanOrEqualTo(dataset.getTrainingProblems().get(i + 1).y[0])));
             assertThat(dataset.getTrainingProblems().get(i).y[1], is(lessThanOrEqualTo(dataset.getTrainingProblems().get(i + 1).y[1])));
         }
@@ -121,8 +123,10 @@ public class FileReaderNWayTest {
 
         //then
         for (int i = 0; i < dataset.getTrainingProblems().size() - 1; i++) {
-            assertThat(dataset.getTrainingProblems().get(i).x[0][0].getValue(), is(lessThanOrEqualTo(dataset.getTrainingProblems().get(i + 1).x[0][0].getValue())));
-            assertThat(dataset.getTrainingProblems().get(i).x[1][0].getValue(), is(lessThanOrEqualTo(dataset.getTrainingProblems().get(i + 1).x[1][0].getValue())));
+            assertThat(dataset.getTrainingProblems().get(i).x[0][0].getValue(),
+                    is(lessThanOrEqualTo(dataset.getTrainingProblems().get(i + 1).x[0][0].getValue())));
+            assertThat(dataset.getTrainingProblems().get(i).x[1][0].getValue(),
+                    is(lessThanOrEqualTo(dataset.getTrainingProblems().get(i + 1).x[1][0].getValue())));
             assertThat(dataset.getTrainingProblems().get(i).y[0], is(lessThanOrEqualTo(dataset.getTrainingProblems().get(i + 1).y[0])));
             assertThat(dataset.getTrainingProblems().get(i).y[1], is(lessThanOrEqualTo(dataset.getTrainingProblems().get(i + 1).y[1])));
         }
@@ -136,7 +140,7 @@ public class FileReaderNWayTest {
     }
 
     @Test
-    public void shouldContainRightAmountOfObjects() throws IOException, InvalidInputDataException {
+    public void shouldSplitCorrectlyAmongValidationProblems() throws IOException, InvalidInputDataException {
 
         // given
         String filename = "src/test/resources/test1.txt";
@@ -154,8 +158,27 @@ public class FileReaderNWayTest {
         Dataset dataset = fileHelper.readFile(opts);
 
         //then
-        dataset.getTrainingProblems().forEach(problem -> assertThat(problem.x.length, is(equalTo(6))));
+        dataset.getTrainingProblems().forEach(problem -> assertThat(problem.l, is(equalTo(6))));
         assertThat(dataset.getValidatingProblems().size(), is(equalTo(numberOfSpaceParts)));
-        dataset.getValidatingProblems().forEach(problem -> assertThat(problem.x.length, is(equalTo(2))));
+        dataset.getValidatingProblems().forEach(problem -> assertThat(problem.l, is(equalTo(2))));
+        for (Problem problem : dataset.getValidatingProblems()) {
+            for (Feature[] features : problem.x) {
+                assertThat(Math.floorMod((int) features[0].getValue(), 5), is(equalTo(3)));
+            }
+        }
+        for (int i = 0; i < dataset.getValidatingProblems().size() - 1; i++) {
+            for (int j = 0; j < dataset.getValidatingProblems().get(i).l; j++) {
+                assertThat(dataset.getValidatingProblems().get(i).x[j][0].getValue(),
+                        is(lessThanOrEqualTo(dataset.getValidatingProblems().get(i + 1).x[0][0].getValue())));
+                assertThat(dataset.getValidatingProblems().get(i + 1).x[j][0].getValue(),
+                        is(greaterThanOrEqualTo(dataset.getValidatingProblems().get(i).x[dataset.getValidatingProblems().get(i).l - 1][0].getValue())));
+            }
+        }
+        for (int i = 0; i < dataset.getValidatingProblems().size(); i++) {
+            for (int j = 0; j < dataset.getValidatingProblems().get(i).l; j++) {
+                assertThat((int) (numberOfSpaceParts * (dataset.getValidatingProblems().get(i).x[j][0].getValue() - dataset.getMinX()) /
+                        (dataset.getMaxX() - dataset.getMinX()) - Constants.EPSILON), is(equalTo(i)));
+            }
+        }
     }
 }
