@@ -1,6 +1,7 @@
 package jb.files;
 
 import de.bwaldvogel.liblinear.Feature;
+import de.bwaldvogel.liblinear.FeatureNode;
 import de.bwaldvogel.liblinear.InvalidInputDataException;
 import de.bwaldvogel.liblinear.Problem;
 import jb.config.Opts;
@@ -9,11 +10,9 @@ import jb.data.Dataset;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
-public class FileReaderNWay implements FileHelper{
+public class FileReaderNWaySameValidation implements FileHelper {
 
     @Override
     public Dataset readFile(Opts opts) throws IOException, InvalidInputDataException {
@@ -30,12 +29,6 @@ public class FileReaderNWay implements FileHelper{
         List<Problem> trainingProblems = new ArrayList<>();
         List<Problem> validatingProblems = new ArrayList<>();
         Problem testingProblem = null;
-        int classChangeIndex = 0;
-        while(clfObjects[classChangeIndex].getY() == 0) {
-            classChangeIndex++;
-        }
-        double minX = Math.min(clfObjects[0].getX()[0].getValue(), clfObjects[classChangeIndex].getX()[0].getValue());
-        double maxX = Math.max(clfObjects[clfObjects.length - 1].getX()[0].getValue(), clfObjects[classChangeIndex - 1].getX()[0].getValue());
         for (int i = 0; i < numberOfSubsets; i++) {
             Feature[][] x = new Feature[countOfSubset][problem.n];
             double[] y = new double[countOfSubset];
@@ -59,6 +52,7 @@ public class FileReaderNWay implements FileHelper{
                 trainingProblems.add(baseProblem);
             }
         }
-        return new Dataset(trainingProblems, validatingProblems, testingProblem, minX, maxX);
+        return new Dataset(trainingProblems, validatingProblems, testingProblem, clfObjects[0].getX()[0].getValue(), clfObjects[clfObjects.length - 1].getX()[0].getValue());
     }
+
 }

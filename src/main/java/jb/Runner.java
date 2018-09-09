@@ -9,7 +9,6 @@ import jb.data.Dataset;
 import jb.data.ScoreTuple;
 import jb.files.FileHelper;
 import jb.files.FileReaderNWay;
-import jb.files.FileReaderSameDataset;
 import jb.integrator.Integrator;
 import jb.integrator.MeanIntegrator;
 import jb.selector.BestSelector;

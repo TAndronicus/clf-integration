@@ -1,8 +1,8 @@
+package jb.files;
+
 import de.bwaldvogel.liblinear.InvalidInputDataException;
 import jb.config.Opts;
 import jb.data.Dataset;
-import jb.files.FileHelper;
-import jb.files.FileReaderNWay;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -10,7 +10,7 @@ import java.io.IOException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class FileReaderNWayTest {
+public class FileReaderNWaySameValidationTest {
 
     @Test
     public void shouldSplitDataIntoRightAmountOfSubspaces() throws IOException, InvalidInputDataException {
@@ -25,7 +25,7 @@ public class FileReaderNWayTest {
         opts.setNumberOfBaseClassifiers(numberOfBaseClassifiers);
 
         // when
-        FileHelper fileHelper = new FileReaderNWay();
+        FileHelper fileHelper = new FileReaderNWaySameValidation();
         Dataset dataset = fileHelper.readFile(opts);
 
         // then
@@ -50,7 +50,7 @@ public class FileReaderNWayTest {
         opts.setNumberOfBaseClassifiers(numberOfBaseClassifiers);
 
         // when
-        FileHelper fileHelper = new FileReaderNWay();
+        FileHelper fileHelper = new FileReaderNWaySameValidation();
         Dataset dataset = fileHelper.readFile(opts);
         for (int i = 0; i < dataset.getTrainingProblems().size(); i++) {
             assertThat(dataset.getTrainingProblems().get(i).y[0], is(equalTo(0.0)));

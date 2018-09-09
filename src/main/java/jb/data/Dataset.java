@@ -13,5 +13,7 @@ public class Dataset {
     private List<Problem> trainingProblems;
     private List<Problem> validatingProblems;
     private Problem testingProblem;
+    private double minX;
+    private double maxX;
 
 }
