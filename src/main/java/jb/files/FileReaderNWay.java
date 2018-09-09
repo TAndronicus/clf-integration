@@ -7,6 +7,9 @@ import jb.config.Constants;
 import jb.config.Opts;
 import jb.data.ClfObjectDoubleSorted;
 import jb.data.Dataset;
+import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import java.io.File;
 import java.io.IOException;
@@ -89,22 +92,13 @@ public class FileReaderNWay implements FileHelper {
         return clfObjectDoubleSorteds;
     }
 
+    @Data
+    @RequiredArgsConstructor
     private class ExtremeValues {
+        @NonNull
         private ClfObjectDoubleSorted[] clfObjectsDoubleSorted;
         private double minX;
         private double maxX;
-
-        public ExtremeValues(ClfObjectDoubleSorted... clfObjectsDoubleSorted) {
-            this.clfObjectsDoubleSorted = clfObjectsDoubleSorted;
-        }
-
-        public double getMinX() {
-            return minX;
-        }
-
-        public double getMaxX() {
-            return maxX;
-        }
 
         public ExtremeValues invoke() {
             int classChangeIndex = 0;
