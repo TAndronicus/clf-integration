@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class ScoreTuple {
 
-    private double[] scores;
-    private double[] weights;
+    private double[][] scores;
+    private double[][] weights;
 
 }

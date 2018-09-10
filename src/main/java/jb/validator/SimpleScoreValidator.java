@@ -13,19 +13,22 @@ public class SimpleScoreValidator implements Validator {
     @Override
     public ScoreTuple validate(List<? extends Model> clfs, Dataset dataset, Opts opts) {
 
-        double[] scores = new double[clfs.size()];
-        double[] weights = new double[clfs.size()];
+        double[][] scores = new double[clfs.size()][opts.getNumberOfSpaceParts()];
+        double[][] weights = new double[clfs.size()][opts.getNumberOfSpaceParts()];
 
-        for (int i = 0; i < dataset.getValidatingProblems().size(); i++) {
-            double propperlyClassified = 0;
-            for (int j = 0; j < dataset.getValidatingProblems().get(i).y.length; j++) {
-                double prediction = Linear.predict(clfs.get(i), dataset.getValidatingProblems().get(i).x[j]);
-                if(prediction == dataset.getTrainingProblems().get(i).y[j]) {
-                    propperlyClassified += 1;
+
+        for (int i = 0; i < clfs.size(); i++) {
+            for (int j = 0; j < opts.getNumberOfSpaceParts(); j++) {
+                double propperlyClassified = 0;
+                for (int k = 0; k < dataset.getValidatingProblems().get(j).l; k++) {
+                    double prediction = Linear.predict(clfs.get(i), dataset.getValidatingProblems().get(j).x[k]);
+                    if (prediction == dataset.getValidatingProblems().get(j).y[k]) {
+                        propperlyClassified += 1;
+                    }
                 }
+                scores[i][j] = propperlyClassified / dataset.getValidatingProblems().get(j).l;
+                weights[i][j] = propperlyClassified / dataset.getValidatingProblems().get(j).l;
             }
-            scores[i] = propperlyClassified / dataset.getValidatingProblems().get(i).y.length;
-            weights[i] = scores[i];
         }
 
         return new ScoreTuple(scores, weights);

@@ -31,7 +31,7 @@ public class Runner {
 
     public static void main(String[] args) throws IOException, InvalidInputDataException {
 
-        Opts opts = Opts.builder().filename("/home/jb/Downloads/data3.txt").bias(1).numberOfBaseClassifiers(3).numberOfSelectedClassifiers(2).
+        Opts opts = Opts.builder().filename("/home/jb/Downloads/data4.txt").bias(1).numberOfBaseClassifiers(3).numberOfSelectedClassifiers(2).
                 numberOfSpaceParts(3).solverType(SolverType.L2R_LR).C(1).eps(.01).build();
         Dataset dataset = fileHelper.readFile(opts);
         List<Model> clfs = trainer.train(dataset, opts);
