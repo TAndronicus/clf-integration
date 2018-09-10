@@ -14,7 +14,7 @@ public class SimpleScoreValidator implements Validator {
     public ScoreTuple validate(List<? extends Model> clfs, Dataset dataset, Opts opts) {
 
         double[][] scores = new double[clfs.size()][opts.getNumberOfSpaceParts()];
-        double[][] weights = new double[clfs.size()][opts.getNumberOfSpaceParts()];
+        double[][] weights = new double[opts.getNumberOfSpaceParts()][clfs.size()];
 
 
         for (int i = 0; i < clfs.size(); i++) {
@@ -27,7 +27,7 @@ public class SimpleScoreValidator implements Validator {
                     }
                 }
                 scores[i][j] = propperlyClassified / dataset.getValidatingProblems().get(j).l;
-                weights[i][j] = propperlyClassified / dataset.getValidatingProblems().get(j).l;
+                weights[j][i] = propperlyClassified / dataset.getValidatingProblems().get(j).l;
             }
         }
 
