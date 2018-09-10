@@ -1,16 +1,17 @@
+package jb.selector;
+
 import jb.config.Opts;
 import jb.data.ScoreTuple;
 import jb.data.SelectedTuple;
-import jb.selector.NBestSelector;
-import jb.selector.Selector;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.when;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NBestSelectorTest {
