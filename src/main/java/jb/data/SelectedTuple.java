@@ -6,9 +6,9 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ClfTuple {
+public class SelectedTuple {
 
-    private List<? extends Model> clfs;
-    private double[] weights;
+    private int[][] indices;
+    private double[][] weights;
 
 }

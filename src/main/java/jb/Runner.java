@@ -4,9 +4,9 @@ import de.bwaldvogel.liblinear.InvalidInputDataException;
 import de.bwaldvogel.liblinear.Model;
 import de.bwaldvogel.liblinear.SolverType;
 import jb.config.Opts;
-import jb.data.ClfTuple;
 import jb.data.Dataset;
 import jb.data.ScoreTuple;
+import jb.data.SelectedTuple;
 import jb.files.FileHelper;
 import jb.files.FileReaderNWay;
 import jb.integrator.Integrator;
@@ -36,8 +36,8 @@ public class Runner {
         Dataset dataset = fileHelper.readFile(opts);
         List<Model> clfs = trainer.train(dataset, opts);
         ScoreTuple scoreTuple = validator.validate(clfs, dataset, opts);
-        ClfTuple clfTuple = selector.select(clfs, scoreTuple, opts);
-        double score = integrator.integrateScore(clfTuple, opts);
+        SelectedTuple selectedTuple = selector.select(scoreTuple, opts);
+        double score = integrator.integrateScore(selectedTuple, opts);
         System.out.println(score);
 
     }
