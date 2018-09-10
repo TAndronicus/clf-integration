@@ -3,6 +3,7 @@ package jb.files;
 import de.bwaldvogel.liblinear.InvalidInputDataException;
 import jb.config.Opts;
 import jb.data.Dataset;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -12,15 +13,20 @@ import static org.hamcrest.Matchers.*;
 
 public class FileReaderNWaySameValidationTest {
 
+    private static final String filename = "src/test/resources/test0.txt";
+    private static final int bias = 1;
+    private static final int numberOfBaseClassifiers = 3;
+    private static Opts opts = null;
+
+    @BeforeAll
+    public static void initialize() {
+        opts = Opts.builder().filename(filename).bias(bias).numberOfBaseClassifiers(3).build();
+    }
+
     @Test
     public void shouldSplitDataIntoRightAmountOfSubspaces() throws IOException, InvalidInputDataException {
 
         // given
-        String filename = "src/test/resources/test0.txt";
-        int bias = 1;
-        int numberOfBaseClassifiers = 3;
-        Opts opts = Opts.builder().filename(filename).bias(bias).numberOfBaseClassifiers(3).build();
-        opts.setNumberOfBaseClassifiers(numberOfBaseClassifiers);
 
         // when
         FileHelper fileHelper = new FileReaderNWaySameValidation();
@@ -39,11 +45,6 @@ public class FileReaderNWaySameValidationTest {
     public void shouldSortData() throws IOException, InvalidInputDataException {
 
         // given
-        String filename = "src/test/resources/test0.txt";
-        int bias = 1;
-        int numberOfBaseClassifiers = 3;
-        Opts opts = Opts.builder().filename(filename).bias(bias).numberOfBaseClassifiers(numberOfBaseClassifiers).build();
-        opts.setNumberOfBaseClassifiers(numberOfBaseClassifiers);
 
         // when
         FileHelper fileHelper = new FileReaderNWaySameValidation();
