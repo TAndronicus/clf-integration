@@ -6,6 +6,8 @@ import de.bwaldvogel.liblinear.Problem;
 import jb.config.Constants;
 import jb.config.Opts;
 import jb.data.Dataset;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -15,19 +17,25 @@ import static org.hamcrest.Matchers.*;
 
 public class FileReaderNWayTest {
 
+    private static final String filenameTest0 = "src/test/resources/test0.txt";
+    private static final String filenameTest1 = "src/test/resources/test1.txt";
+    private static final int bias = 1;
+    private static final int numberOfBaseClassifiers = 3;
+    private static final int numberOfSpaceParts = 3;
+    private static Opts opts = null;
+
+    @BeforeAll
+    public static void initialize() {
+
+        opts = Opts.builder().bias(bias).numberOfBaseClassifiers(numberOfBaseClassifiers).numberOfSpaceParts(numberOfSpaceParts).build();
+
+    }
+
     @Test
     public void shouldSplitDataIntoRightAmountOfSubspacesTest0() throws IOException, InvalidInputDataException {
 
         // given
-        String filename = "src/test/resources/test0.txt";
-        int bias = 1;
-        int numberOfBaseClassifiers = 3;
-        int numberOfSpaceParts = 3;
-        Opts opts = new Opts();
-        opts.setFilename(filename);
-        opts.setBias(bias);
-        opts.setNumberOfBaseClassifiers(numberOfBaseClassifiers);
-        opts.setNumberOfSpaceParts(numberOfSpaceParts);
+        opts.setFilename(filenameTest0);
 
         // when
         FileHelper fileHelper = new FileReaderNWay();
@@ -43,15 +51,7 @@ public class FileReaderNWayTest {
     public void shouldSplitDataIntoRightAmountOfSubspacesTest1() throws IOException, InvalidInputDataException {
 
         // given
-        String filename = "src/test/resources/test1.txt";
-        int bias = 1;
-        int numberOfBaseClassifiers = 3;
-        int numberOfSpaceParts = 3;
-        Opts opts = new Opts();
-        opts.setFilename(filename);
-        opts.setBias(bias);
-        opts.setNumberOfBaseClassifiers(numberOfBaseClassifiers);
-        opts.setNumberOfSpaceParts(numberOfSpaceParts);
+        opts.setFilename(filenameTest1);
 
         // when
         FileHelper fileHelper = new FileReaderNWay();
@@ -67,15 +67,7 @@ public class FileReaderNWayTest {
     public void shouldSortDataTest0() throws IOException, InvalidInputDataException {
 
         // given
-        String filename = "src/test/resources/test0.txt";
-        int bias = 1;
-        int numberOfBaseClassifiers = 3;
-        int numberOfSpaceParts = 3;
-        Opts opts = new Opts();
-        opts.setFilename(filename);
-        opts.setBias(bias);
-        opts.setNumberOfBaseClassifiers(numberOfBaseClassifiers);
-        opts.setNumberOfSpaceParts(numberOfSpaceParts);
+        opts.setFilename(filenameTest0);
 
         // when
         FileHelper fileHelper = new FileReaderNWay();
@@ -107,15 +99,7 @@ public class FileReaderNWayTest {
     public void shouldSortDataTest1() throws IOException, InvalidInputDataException {
 
         // given
-        String filename = "src/test/resources/test1.txt";
-        int bias = 1;
-        int numberOfBaseClassifiers = 3;
-        int numberOfSpaceParts = 3;
-        Opts opts = new Opts();
-        opts.setFilename(filename);
-        opts.setBias(bias);
-        opts.setNumberOfBaseClassifiers(numberOfBaseClassifiers);
-        opts.setNumberOfSpaceParts(numberOfSpaceParts);
+        opts.setFilename(filenameTest1);
 
         // when
         FileHelper fileHelper = new FileReaderNWay();
@@ -143,15 +127,7 @@ public class FileReaderNWayTest {
     public void shouldSplitCorrectlyAmongValidationProblems() throws IOException, InvalidInputDataException {
 
         // given
-        String filename = "src/test/resources/test1.txt";
-        int bias = 1;
-        int numberOfBaseClassifiers = 3;
-        int numberOfSpaceParts = 3;
-        Opts opts = new Opts();
-        opts.setFilename(filename);
-        opts.setBias(bias);
-        opts.setNumberOfBaseClassifiers(numberOfBaseClassifiers);
-        opts.setNumberOfSpaceParts(numberOfSpaceParts);
+        opts.setFilename(filenameTest1);
 
         // when
         FileHelper fileHelper = new FileReaderNWay();

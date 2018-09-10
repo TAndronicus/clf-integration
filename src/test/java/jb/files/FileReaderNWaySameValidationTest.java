@@ -19,9 +19,7 @@ public class FileReaderNWaySameValidationTest {
         String filename = "src/test/resources/test0.txt";
         int bias = 1;
         int numberOfBaseClassifiers = 3;
-        Opts opts = new Opts();
-        opts.setFilename(filename);
-        opts.setBias(bias);
+        Opts opts = Opts.builder().filename(filename).bias(bias).numberOfBaseClassifiers(3).build();
         opts.setNumberOfBaseClassifiers(numberOfBaseClassifiers);
 
         // when
@@ -44,9 +42,7 @@ public class FileReaderNWaySameValidationTest {
         String filename = "src/test/resources/test0.txt";
         int bias = 1;
         int numberOfBaseClassifiers = 3;
-        Opts opts = new Opts();
-        opts.setFilename(filename);
-        opts.setBias(bias);
+        Opts opts = Opts.builder().filename(filename).bias(bias).numberOfBaseClassifiers(numberOfBaseClassifiers).build();
         opts.setNumberOfBaseClassifiers(numberOfBaseClassifiers);
 
         // when

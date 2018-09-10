@@ -31,15 +31,8 @@ public class Runner {
 
     public static void main(String[] args) throws IOException, InvalidInputDataException {
 
-        Opts opts = new Opts();
-        opts.setFilename("/home/jb/Downloads/data3.txt");
-        opts.setBias(1);
-        opts.setNumberOfBaseClassifiers(3);
-        opts.setNumberOfSelectedClassifiers(2);
-        opts.setNumberOfSpaceParts(3);
-        opts.setSolverType(SolverType.L2R_LR);
-        opts.setC(1);
-        opts.setEps(.01);
+        Opts opts = Opts.builder().filename("/home/jb/Downloads/data3.txt").bias(1).numberOfBaseClassifiers(3).numberOfSelectedClassifiers(2).
+                numberOfSpaceParts(3).solverType(SolverType.L2R_LR).C(1).eps(.01).build();
         Dataset dataset = fileHelper.readFile(opts);
         List<Model> clfs = trainer.train(dataset, opts);
         ScoreTuple scoreTuple = validator.validate(clfs, dataset, opts);
