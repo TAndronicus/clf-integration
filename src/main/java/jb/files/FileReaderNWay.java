@@ -49,12 +49,7 @@ public class FileReaderNWay implements FileHelper {
                     x[j] = clfObjectDoubleSorteds[j * numberOfSubsets + i].getX();
                     y[j] = clfObjectDoubleSorteds[j * numberOfSubsets + i].getY();
                 }
-                Problem baseProblem = new Problem();
-                baseProblem.bias = opts.getBias();
-                baseProblem.x = x;
-                baseProblem.y = y;
-                baseProblem.n = problem.n;
-                baseProblem.l = countOfSubset;
+                Problem baseProblem = getBaseProblem(opts, problem, countOfSubset, x, y);
                 if (i == numberOfSubsets - 1) {
                     testingProblem = baseProblem;
                 } else {
@@ -80,15 +75,20 @@ public class FileReaderNWay implements FileHelper {
                 y[j] = clfObjectDoubleSorted.getY();
                 counter++;
             }
-            Problem baseProblem = new Problem();
-            baseProblem.bias = opts.getBias();
-            baseProblem.x = x;
-            baseProblem.y = y;
-            baseProblem.n = problem.n;
-            baseProblem.l = countOfValidatingObjects[i];
+            Problem baseProblem = getBaseProblem(opts, problem, countOfValidatingObjects[i], x, y);
             validatingProblems.add(baseProblem);
         }
         return new Dataset(trainingProblems, validatingProblems, testingProblem, minX, maxX);
+    }
+
+    private Problem getBaseProblem(Opts opts, Problem problem, int countOfSubset, Feature[][] x, double[] y) {
+        Problem baseProblem = new Problem();
+        baseProblem.bias = opts.getBias();
+        baseProblem.x = x;
+        baseProblem.y = y;
+        baseProblem.n = problem.n;
+        baseProblem.l = countOfSubset;
+        return baseProblem;
     }
 
     private ClfObjectDoubleSorted[] getClfObjects(Problem problem) {
