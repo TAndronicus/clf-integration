@@ -7,7 +7,13 @@ import lombok.Data;
 @AllArgsConstructor
 public class ScoreTuple {
 
+    /**
+     * scores[numberOfBaseClassifiers][numberOfSpaceParts]
+     */
     private double[][] scores;
+    /**
+     * weight[numberOfSpaceParts][numberOfBaseClassifiers]
+     */
     private double[][] weights;
 
 }

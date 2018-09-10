@@ -1,11 +1,10 @@
 package jb.data;
 
-import de.bwaldvogel.liblinear.Model;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
+@AllArgsConstructor
 public class SelectedTuple {
 
     private int[][] indices;

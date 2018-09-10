@@ -11,7 +11,7 @@ import jb.files.FileHelper;
 import jb.files.FileReaderNWay;
 import jb.integrator.Integrator;
 import jb.integrator.MeanIntegrator;
-import jb.selector.BestSelector;
+import jb.selector.NBestSelector;
 import jb.selector.Selector;
 import jb.trainer.SVMTrainer;
 import jb.trainer.Trainer;
@@ -26,7 +26,7 @@ public class Runner {
     static FileHelper fileHelper = new FileReaderNWay();
     static Trainer trainer = new SVMTrainer();
     static Validator validator = new SimpleScoreValidator();
-    static Selector selector = new BestSelector();
+    static Selector selector = new NBestSelector();
     static Integrator integrator = new MeanIntegrator();
 
     public static void main(String[] args) throws IOException, InvalidInputDataException {
@@ -41,4 +41,5 @@ public class Runner {
         System.out.println(score);
 
     }
+
 }
