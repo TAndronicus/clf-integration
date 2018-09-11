@@ -5,6 +5,7 @@ import de.bwaldvogel.liblinear.Model;
 import de.bwaldvogel.liblinear.SolverType;
 import jb.config.Opts;
 import jb.data.Dataset;
+import jb.data.IntegratedModel;
 import jb.data.ScoreTuple;
 import jb.data.SelectedTuple;
 import jb.files.FileHelper;
@@ -37,8 +38,7 @@ public class Runner {
         List<Model> clfs = trainer.train(dataset, opts);
         ScoreTuple scoreTuple = validator.validate(clfs, dataset, opts);
         SelectedTuple selectedTuple = selector.select(scoreTuple, opts);
-        double score = integrator.integrateScore(selectedTuple, opts);
-        System.out.println(score);
+        IntegratedModel integratedModel = integrator.integrateScore(selectedTuple, clfs, opts);
 
     }
 
