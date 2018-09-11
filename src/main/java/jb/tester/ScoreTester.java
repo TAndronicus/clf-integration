@@ -9,7 +9,7 @@ import static jb.util.ModelUtils.getIndexOfSubspace;
 public class ScoreTester {
 
     public double test(IntegratedModel integratedModel, Dataset dataset) {
-        int counter = 0;
+        double counter = 0;
         for (int i = 0; i < dataset.getTestingProblem().l; i++) {
             int index = getIndexOfSubspace(integratedModel.getA().length, dataset.getTestingProblem().x[i][0].getValue(), dataset.getMinX(), dataset.getMaxX());
             double value = integratedModel.getA()[index] * dataset.getTestingProblem().x[i][0].getValue() + integratedModel.getB()[index];
