@@ -16,7 +16,7 @@ import static jb.util.ModelUtils.getBs;
 public class MeanIntegrator implements Integrator {
 
     @Override
-    public IntegratedModel integrateScore(SelectedTuple selectedTuple, List<Model> clfs, Opts opts) {
+    public IntegratedModel integrate(SelectedTuple selectedTuple, List<Model> clfs, Opts opts) {
         
         double[] a = new double[opts.getNumberOfSpaceParts()];
         double[] b = new double[opts.getNumberOfSpaceParts()];

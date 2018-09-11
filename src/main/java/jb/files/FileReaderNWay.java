@@ -25,7 +25,7 @@ public class FileReaderNWay implements FileHelper {
     public Dataset readFile(Opts opts) throws IOException, InvalidInputDataException {
 
         Problem problem = Problem.readFromFile(new File(opts.getFilename()), opts.getBias());
-        ClfObjectDoubleSorted[] clfObjectDoubleSorteds = getClfObjects(problem);
+        ClfObjectDoubleSorted[] clfObjectsDoubleSorted = getClfObjects(problem);
 
         int numberOfSubsets = opts.getNumberOfBaseClassifiers() + 2;
         int countOfSubset = problem.l / (numberOfSubsets);
@@ -37,7 +37,7 @@ public class FileReaderNWay implements FileHelper {
         int[] countOfValidatingObjects = new int[opts.getNumberOfSpaceParts()];
         ClfObjectOnceSorted[] clfObjectsOnceSorted = new ClfObjectOnceSorted[countOfSubset];
 
-        ExtremeValues extremeValues = new ExtremeValues(clfObjectDoubleSorteds).invoke();
+        ExtremeValues extremeValues = new ExtremeValues(clfObjectsDoubleSorted).invoke();
         double minX = extremeValues.getMinX();
         double maxX = extremeValues.getMaxX();
 
@@ -46,8 +46,8 @@ public class FileReaderNWay implements FileHelper {
                 Feature[][] x = new Feature[countOfSubset][problem.n];
                 double[] y = new double[countOfSubset];
                 for (int j = 0; j < countOfSubset; j++) {
-                    x[j] = clfObjectDoubleSorteds[j * numberOfSubsets + i].getX();
-                    y[j] = clfObjectDoubleSorteds[j * numberOfSubsets + i].getY();
+                    x[j] = clfObjectsDoubleSorted[j * numberOfSubsets + i].getX();
+                    y[j] = clfObjectsDoubleSorted[j * numberOfSubsets + i].getY();
                 }
                 Problem baseProblem = getBaseProblem(opts, problem, countOfSubset, x, y);
                 if (i == numberOfSubsets - 1) {
@@ -57,8 +57,8 @@ public class FileReaderNWay implements FileHelper {
                 }
             } else {
                 for (int j = 0; j < countOfSubset; j++) {
-                    countOfValidatingObjects[(int) (opts.getNumberOfSpaceParts() * (clfObjectDoubleSorteds[j * numberOfSubsets + i].getX()[0].getValue() - minX) / (maxX - minX) - Constants.EPSILON)]++;
-                    clfObjectsOnceSorted[j] = clfObjectDoubleSorteds[j * numberOfSubsets + i].convertToOnceSorted();
+                    countOfValidatingObjects[(int) (opts.getNumberOfSpaceParts() * (clfObjectsDoubleSorted[j * numberOfSubsets + i].getX()[0].getValue() - minX) / (maxX - minX) - Constants.EPSILON)]++;
+                    clfObjectsOnceSorted[j] = clfObjectsDoubleSorted[j * numberOfSubsets + i].convertToOnceSorted();
                 }
             }
         }

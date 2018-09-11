@@ -38,7 +38,7 @@ public class Runner {
         List<Model> clfs = trainer.train(dataset, opts);
         ScoreTuple scoreTuple = validator.validate(clfs, dataset, opts);
         SelectedTuple selectedTuple = selector.select(scoreTuple, opts);
-        IntegratedModel integratedModel = integrator.integrateScore(selectedTuple, clfs, opts);
+        IntegratedModel integratedModel = integrator.integrate(selectedTuple, clfs, opts);
 
     }
 

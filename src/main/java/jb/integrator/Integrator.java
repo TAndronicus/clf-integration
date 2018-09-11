@@ -10,6 +10,6 @@ import java.util.List;
 @FunctionalInterface
 public interface Integrator {
 
-    IntegratedModel integrateScore(SelectedTuple selectedTuple, List<Model> clfs, Opts opts);
+    IntegratedModel integrate(SelectedTuple selectedTuple, List<Model> clfs, Opts opts);
 
 }
