@@ -1,6 +1,8 @@
 package jb.util;
 
+import de.bwaldvogel.liblinear.Linear;
 import de.bwaldvogel.liblinear.Model;
+import jb.data.ClfObject;
 
 import java.util.List;
 
@@ -16,6 +18,11 @@ public class ModelUtils {
 
     public static double[] getBs(List<Model> clfs) {
         return new double[clfs.size()];
+    }
+
+    public static boolean predictsPropperly(Model model, ClfObject clfObject) {
+        double prediction = Linear.predict(model, clfObject.getX());
+        return prediction == clfObject.getY();
     }
 
 }

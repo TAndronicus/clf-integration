@@ -1,12 +1,14 @@
 package jb.validator;
 
-import de.bwaldvogel.liblinear.Linear;
 import de.bwaldvogel.liblinear.Model;
 import jb.config.Opts;
+import jb.data.ClfObjectOnceSorted;
 import jb.data.Dataset;
 import jb.data.ScoreTuple;
 
 import java.util.List;
+
+import static jb.util.ModelUtils.predictsPropperly;
 
 public class SimpleScoreValidator implements Validator {
 
@@ -21,8 +23,7 @@ public class SimpleScoreValidator implements Validator {
             for (int j = 0; j < opts.getNumberOfSpaceParts(); j++) {
                 double propperlyClassified = 0;
                 for (int k = 0; k < dataset.getValidatingProblems().get(j).l; k++) {
-                    double prediction = Linear.predict(clfs.get(i), dataset.getValidatingProblems().get(j).x[k]);
-                    if (prediction == dataset.getValidatingProblems().get(j).y[k]) {
+                    if (predictsPropperly(clfs.get(i), new ClfObjectOnceSorted(dataset.getValidatingProblems().get(j).x[k], dataset.getValidatingProblems().get(j).y[k]))) {
                         propperlyClassified += 1;
                     }
                 }
