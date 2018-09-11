@@ -10,10 +10,10 @@ public class ScoreTester {
 
     public double test(IntegratedModel integratedModel, Dataset dataset) {
         int counter = 0;
-        for (Feature[] features : dataset.getTestingProblem().x) {
-            int index = getIndexOfSubspace(integratedModel.getA().length, features[0].getValue(), dataset.getMinX(), dataset.getMaxX());
-            double value = integratedModel.getA()[index] * features[0].getValue() + integratedModel.getB()[index];
-            if (value > features[1].getValue()) {
+        for (int i = 0; i < dataset.getTestingProblem().l; i++) {
+            int index = getIndexOfSubspace(integratedModel.getA().length, dataset.getTestingProblem().x[i][0].getValue(), dataset.getMinX(), dataset.getMaxX());
+            double value = integratedModel.getA()[index] * dataset.getTestingProblem().x[i][0].getValue() + integratedModel.getB()[index];
+            if (value > dataset.getTestingProblem().x[i][1].getValue() ^ dataset.getTestingProblem().y[i] == 1) {
                 counter++;
             }
         }
