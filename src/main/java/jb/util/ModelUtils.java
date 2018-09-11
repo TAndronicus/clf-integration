@@ -6,6 +6,8 @@ import jb.data.ClfObject;
 
 import java.util.List;
 
+import static jb.config.Constants.EPSILON;
+
 public class ModelUtils {
 
     public static double[] getAs(List<Model> clfs) {
@@ -23,6 +25,10 @@ public class ModelUtils {
     public static boolean predictsPropperly(Model model, ClfObject clfObject) {
         double prediction = Linear.predict(model, clfObject.getX());
         return prediction == clfObject.getY();
+    }
+
+    public static int getIndexOfSubspace(int numberOfSpaceParts, double xSample, double minX, double maxX) {
+        return (int) (numberOfSpaceParts * (xSample - minX) / (maxX - minX) - EPSILON);
     }
 
 }

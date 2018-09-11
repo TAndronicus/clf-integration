@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static jb.util.ModelUtils.getIndexOfSubspace;
+
 public class FileReaderNWay implements FileHelper {
 
     @Override
@@ -57,7 +59,7 @@ public class FileReaderNWay implements FileHelper {
                 }
             } else {
                 for (int j = 0; j < countOfSubset; j++) {
-                    countOfValidatingObjects[(int) (opts.getNumberOfSpaceParts() * (clfObjectsDoubleSorted[j * numberOfSubsets + i].getX()[0].getValue() - minX) / (maxX - minX) - Constants.EPSILON)]++;
+                    countOfValidatingObjects[getIndexOfSubspace(opts.getNumberOfSpaceParts(), clfObjectsDoubleSorted[j * numberOfSubsets + 1].getX()[0].getValue(), minX, maxX)]++;
                     clfObjectsOnceSorted[j] = clfObjectsDoubleSorted[j * numberOfSubsets + i].convertToOnceSorted();
                 }
             }
