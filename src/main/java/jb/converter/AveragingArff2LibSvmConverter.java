@@ -27,7 +27,6 @@ public class AveragingArff2LibSvmConverter {
         try (PrintWriter printWriter = new PrintWriter(new File(file.getPath().split("[.]")[0] + "_converted." + file.getPath().split("[.]")[1]))) {
             int valuesCounter = 0;
             double[] average = null;
-            double[] square = null;
             for (String line : lines) {
                 if (line.startsWith("@") || line.startsWith("%")) {
                     continue;
@@ -35,17 +34,14 @@ public class AveragingArff2LibSvmConverter {
                 String[] values = line.split(",");
                 if (average == null) {
                     average = new double[values.length - 1];
-                    square = new double[values.length - 1];
                 }
                 for (int i = 0; i < values.length - 1; i++) {
                     average[i] += Double.valueOf(values[i]);
-                    square[i] += Math.pow(Double.valueOf(values[i]), 2);
                 }
                 valuesCounter++;
             }
             for (int i = 0; i < average.length; i++) {
                 average[i] = average[i] / valuesCounter;
-                square[i] = Math.sqrt(square[i] / valuesCounter);
             }
             int counter = 0;
             for (String line : lines) {
@@ -56,7 +52,7 @@ public class AveragingArff2LibSvmConverter {
                 String[] values = line.split(",");
                 newline.append(values[values.length - 1]);
                 for (int i = 0; i < values.length - 1; i++) {
-                    newline.append(" " + (i + 1) + ":" + ((Double.valueOf(values[i]) - average[i]) / square[i]));
+                    newline.append(" " + (i + 1) + ":" + (Double.valueOf(values[i]) - average[i]));
                 }
                 printWriter.println(newline.toString());
                 counter++;
