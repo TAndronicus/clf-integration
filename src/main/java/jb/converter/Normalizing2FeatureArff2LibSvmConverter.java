@@ -10,8 +10,8 @@ import java.util.List;
 public class Normalizing2FeatureArff2LibSvmConverter {
 
     private static String pathToResources = "src/main/resources";
-    private static int col1 = 3;
-    private static int col2 = 4;
+    private static int col1 = 2;
+    private static int col2 = 3;
 
     public static void main(String[] args) {
         File rootCatalog = new File(pathToResources);

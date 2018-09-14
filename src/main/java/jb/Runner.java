@@ -14,6 +14,7 @@ import jb.integrator.Integrator;
 import jb.integrator.MeanIntegrator;
 import jb.selector.NBestSelector;
 import jb.selector.Selector;
+import jb.tester.ScoreTester;
 import jb.trainer.SVMTrainer;
 import jb.trainer.Trainer;
 import jb.validator.SimpleScoreValidator;
@@ -32,13 +33,15 @@ public class Runner {
 
     public static void main(String[] args) throws IOException, InvalidInputDataException {
 
-        Opts opts = Opts.builder().filename("/home/jb/Downloads/data4.txt").bias(1).numberOfBaseClassifiers(3).numberOfSelectedClassifiers(2).
+        Opts opts = Opts.builder().filename("src/main/resources/data_banknote_authentication_converted.csv").bias(1).numberOfBaseClassifiers(3).numberOfSelectedClassifiers(2).
                 numberOfSpaceParts(3).solverType(SolverType.L2R_LR).C(1).eps(.01).build();
         Dataset dataset = fileHelper.readFile(opts);
         List<Model> clfs = trainer.train(dataset, opts);
         ScoreTuple scoreTuple = validator.validate(clfs, dataset, opts);
         SelectedTuple selectedTuple = selector.select(scoreTuple, opts);
         IntegratedModel integratedModel = integrator.integrate(selectedTuple, clfs, opts);
+        ScoreTester scoreTester = new ScoreTester();
+        System.out.println(scoreTester.test(integratedModel, dataset));
 
     }
 
