@@ -35,16 +35,13 @@ public class MultiRunner {
 
     public static void main(String[] args) throws IOException, InvalidInputDataException {
 
-        String rootPath = "src/main/resources";
+        String rootPath = "src/main/resources/target";
         Opts opts = Opts.builder().bias(1).solverType(SolverType.L2R_LR).C(1).eps(.01).build();
         int[] numbersOfBaseClassifiers = {3, 5, 7, 9};
         int[] numbersOfSpaceParts = {3, 4, 5, 6, 7, 8, 9, 10};
         Date before = new Date();
 
         for (File file : (new File(rootPath)).listFiles()) {
-            if (!file.getPath().matches(".*converted.*")) {
-                continue;
-            }
             for (int numberOfSpaceParts : numbersOfSpaceParts) {
                 opts.setNumberOfSpaceParts(numberOfSpaceParts);
                 for (int numberOfBaseClassifiers : numbersOfBaseClassifiers) {

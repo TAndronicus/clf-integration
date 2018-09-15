@@ -12,8 +12,8 @@ import java.util.logging.Logger;
 public class Normalizing2FeatureArff2LibSvmConverter {
 
     public static void main(String[] args) {
-        String pathToResources = "src/main/resources";
-        File rootCatalog = new File(pathToResources);
+        String pathToSources = "src/main/resources/source";
+        File rootCatalog = new File(pathToSources);
         for (File file : rootCatalog.listFiles()) {
             try {
                 convertFile(file);
@@ -24,6 +24,7 @@ public class Normalizing2FeatureArff2LibSvmConverter {
     }
 
     public static void convertFile(File file) throws IOException {
+        String pathToTargets = "src/main/resources/target";
         List<String> lines = Files.readAllLines(Paths.get(file.getPath()));
         int valuesCounter = 0;
         double[] average = null;
@@ -51,7 +52,7 @@ public class Normalizing2FeatureArff2LibSvmConverter {
             square[i] = Math.sqrt(square[i] / valuesCounter);
         }
         columns = selectFeatures(square);
-        try (PrintWriter printWriter = new PrintWriter(new File(file.getPath().split("[.]")[0] + "_" + columns[0] + "_" +
+        try (PrintWriter printWriter = new PrintWriter(new File(pathToTargets + "//" + file.getName().split("[.]")[0] + "_" + columns[0] + "_" +
                 columns[1] + "_converted." + file.getPath().split("[.]")[1]))) {
             int counter = 0;
             for (String line : lines) {
