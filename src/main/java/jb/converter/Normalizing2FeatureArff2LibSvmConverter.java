@@ -87,7 +87,7 @@ public class Normalizing2FeatureArff2LibSvmConverter {
         int[] columns = new int[2];
         for (int i = 0; i < square.length; i++) {
             for (int j = 0; j < columns.length; j++) {
-                if (Arrays.binarySearch(copyOfSquare, square[i]) == j) {
+                if (Arrays.binarySearch(copyOfSquare, square[i]) == square.length - 1 - j) {
                     columns[j] = i;
                 }
             }
