@@ -7,12 +7,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Normalizing2FeatureArff2LibSvmConverter {
 
-    private static String pathToResources = "src/main/resources";
-
     public static void main(String[] args) {
+        String pathToResources = "src/main/resources";
         File rootCatalog = new File(pathToResources);
         for (File file : rootCatalog.listFiles()) {
             try {
