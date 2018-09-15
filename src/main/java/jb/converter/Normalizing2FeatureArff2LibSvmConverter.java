@@ -83,6 +83,7 @@ public class Normalizing2FeatureArff2LibSvmConverter {
 
     private static int[] selectFeatures(double[] square) {
         double[] copyOfSquare = Arrays.copyOf(square, square.length);
+        Arrays.sort(copyOfSquare);
         int[] columns = new int[2];
         for (int i = 0; i < square.length; i++) {
             for (int j = 0; j < columns.length; j++) {
