@@ -14,7 +14,8 @@ import jb.integrator.Integrator;
 import jb.integrator.MeanIntegrator;
 import jb.selector.NBestSelector;
 import jb.selector.Selector;
-import jb.tester.ScoreTester;
+import jb.tester.IntegratedScoreTester;
+import jb.tester.MVScoreTester;
 import jb.trainer.SVMTrainer;
 import jb.trainer.Trainer;
 import jb.validator.SimpleScoreValidator;
@@ -55,8 +56,10 @@ public class MultiRunner {
                         ScoreTuple scoreTuple = validator.validate(clfs, dataset, opts);
                         SelectedTuple selectedTuple = selector.select(scoreTuple, opts);
                         IntegratedModel integratedModel = integrator.integrate(selectedTuple, clfs, opts);
-                        ScoreTester scoreTester = new ScoreTester();
-                        System.out.println(scoreTester.test(integratedModel, dataset));
+                        IntegratedScoreTester integratedScoreTester = new IntegratedScoreTester();
+                        MVScoreTester mvScoreTester = new MVScoreTester();
+                        System.out.println(integratedScoreTester.test(integratedModel, dataset));
+                        System.out.println(mvScoreTester.test(clfs, dataset));
                     }
                 }
             }

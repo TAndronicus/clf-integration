@@ -1,12 +1,11 @@
 package jb.tester;
 
-import de.bwaldvogel.liblinear.Feature;
 import jb.data.Dataset;
 import jb.data.IntegratedModel;
 
 import static jb.util.ModelUtils.getIndexOfSubspace;
 
-public class ScoreTester {
+public class IntegratedScoreTester {
 
     public double test(IntegratedModel integratedModel, Dataset dataset) {
         double counter = 0;

@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class ScoreTesterTest {
+public class IntegratedScoreTesterTest {
 
     @Test
     public void shouldReturnRightScore() {
@@ -35,8 +35,8 @@ public class ScoreTesterTest {
         Dataset dataset = new Dataset(new ArrayList<>(), new ArrayList<>(), problem, minX, maxX);
 
         // when
-        ScoreTester scoreTester = new ScoreTester();
-        double score = scoreTester.test(integratedModel, dataset);
+        IntegratedScoreTester integratedScoreTester = new IntegratedScoreTester();
+        double score = integratedScoreTester.test(integratedModel, dataset);
 
         // then
         assertThat(score, is(equalTo(0.6)));

@@ -14,7 +14,7 @@ import jb.integrator.Integrator;
 import jb.integrator.MeanIntegrator;
 import jb.selector.NBestSelector;
 import jb.selector.Selector;
-import jb.tester.ScoreTester;
+import jb.tester.IntegratedScoreTester;
 import jb.trainer.SVMTrainer;
 import jb.trainer.Trainer;
 import jb.validator.SimpleScoreValidator;
@@ -40,8 +40,8 @@ public class Runner {
         ScoreTuple scoreTuple = validator.validate(clfs, dataset, opts);
         SelectedTuple selectedTuple = selector.select(scoreTuple, opts);
         IntegratedModel integratedModel = integrator.integrate(selectedTuple, clfs, opts);
-        ScoreTester scoreTester = new ScoreTester();
-        System.out.println(scoreTester.test(integratedModel, dataset));
+        IntegratedScoreTester integratedScoreTester = new IntegratedScoreTester();
+        System.out.println(integratedScoreTester.test(integratedModel, dataset));
 
     }
 
