@@ -25,7 +25,7 @@ public class FileReaderNWay implements FileHelper {
     @Override
     public Dataset readFile(Opts opts) throws IOException, InvalidInputDataException {
 
-        Problem rootProblem = Problem.readFromFile(new File(opts.getFilename()), opts.getBias());
+        Problem rootProblem = Problem.readFromFile(new File(opts.getFilePath()), opts.getBias());
         ClfObjectDoubleSorted[] allObjects = getClfObjects(rootProblem);
 
         int numberOfSubsets = opts.getNumberOfBaseClassifiers() + 2;

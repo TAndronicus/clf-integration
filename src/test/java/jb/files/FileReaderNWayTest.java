@@ -34,7 +34,7 @@ public class FileReaderNWayTest {
     public void shouldSplitDataIntoRightAmountOfSubspacesTest0() throws IOException, InvalidInputDataException {
 
         // given
-        opts.setFilename(filenameTest0);
+        opts.setFilePath(filenameTest0);
 
         // when
         FileHelper fileHelper = new FileReaderNWay();
@@ -50,7 +50,7 @@ public class FileReaderNWayTest {
     public void shouldSplitDataIntoRightAmountOfSubspacesTest1() throws IOException, InvalidInputDataException {
 
         // given
-        opts.setFilename(filenameTest1);
+        opts.setFilePath(filenameTest1);
 
         // when
         FileHelper fileHelper = new FileReaderNWay();
@@ -66,7 +66,7 @@ public class FileReaderNWayTest {
     public void shouldSortDataTest0() throws IOException, InvalidInputDataException {
 
         // given
-        opts.setFilename(filenameTest0);
+        opts.setFilePath(filenameTest0);
 
         // when
         FileHelper fileHelper = new FileReaderNWay();
@@ -98,7 +98,7 @@ public class FileReaderNWayTest {
     public void shouldSortDataTest1() throws IOException, InvalidInputDataException {
 
         // given
-        opts.setFilename(filenameTest1);
+        opts.setFilePath(filenameTest1);
 
         // when
         FileHelper fileHelper = new FileReaderNWay();
@@ -126,7 +126,7 @@ public class FileReaderNWayTest {
     public void shouldSplitCorrectlyAmongValidationProblems() throws IOException, InvalidInputDataException {
 
         // given
-        opts.setFilename(filenameTest1);
+        opts.setFilePath(filenameTest1);
 
         // when
         FileHelper fileHelper = new FileReaderNWay();

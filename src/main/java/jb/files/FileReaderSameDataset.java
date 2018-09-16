@@ -14,7 +14,7 @@ public class FileReaderSameDataset implements FileHelper {
 
     @Override
     public Dataset readFile(Opts opts) throws IOException, InvalidInputDataException {
-        Problem problem = Problem.readFromFile(new File(opts.getFilename()), 1);
+        Problem problem = Problem.readFromFile(new File(opts.getFilePath()), 1);
         List<Problem> trainingProblems = new ArrayList<>();
         for (int i = 0; i < opts.getNumberOfBaseClassifiers(); i++) {
             trainingProblems.add(problem);
