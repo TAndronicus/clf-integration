@@ -12,7 +12,7 @@ public class Opts {
     /**
      * Absolute path to file in LibSVM format
      */
-    private String filename;
+    private String filePath;
     /**
      * Non-positive bias means fixing classifier discriminator function in (0, 0, ..., 0)
      */
@@ -42,5 +42,11 @@ public class Opts {
      * Stopping criteria
      */
     private double eps;
+
+    public String getFilename() {
+        String[] pathParts = this.filePath.split("/");
+        String[] nameParts = pathParts[pathParts.length - 1].split("[.]");
+        return nameParts[0];
+    }
 
 }
