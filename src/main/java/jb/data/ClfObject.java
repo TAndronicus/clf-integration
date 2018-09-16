@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public abstract class ClfObject implements Comparable<ClfObject> {
 
-    protected Feature[] x;
-    protected double y;
+    protected double[] x;
+    protected int y;
 
 }

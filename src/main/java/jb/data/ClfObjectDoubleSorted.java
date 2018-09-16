@@ -1,16 +1,14 @@
 package jb.data;
 
-import de.bwaldvogel.liblinear.Feature;
-
 public class ClfObjectDoubleSorted extends ClfObject {
 
-    public ClfObjectDoubleSorted(Feature[] x, double y) {
+    public ClfObjectDoubleSorted(double[] x, int y) {
         super(x, y);
     }
 
     @Override
     public int compareTo(ClfObject o) {
-        return y != o.getY() ? Double.compare(y, o.getY()) : Double.compare(x[0].getValue(), o.getX()[0].getValue());
+        return y != o.getY() ? Integer.compare(y, o.getY()) : Double.compare(x[0], o.getX()[0]);
     }
 
     public ClfObjectOnceSorted convertToOnceSorted() {
