@@ -43,4 +43,16 @@ public class ModelUtils {
         }
     }
 
+    public static double calculateMccFromConfMat(int[][] confMat) {
+        double nominator = .0 + confMat[0][0] * confMat[1][1] - confMat[0][1] * confMat[1][0];
+        double denominatorSq = .0;
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                denominatorSq *= (confMat[i][i] + confMat[j][1 - j]);
+            }
+        }
+        double denominator = Math.sqrt(denominatorSq);
+        return nominator / denominator;
+    }
+
 }
