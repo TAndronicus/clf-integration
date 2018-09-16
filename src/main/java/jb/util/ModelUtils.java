@@ -31,4 +31,8 @@ public class ModelUtils {
         return (int) (numberOfSpaceParts * (xSample - minX) / (maxX - minX) - EPSILON);
     }
 
+    public static double getScoreFromConfMat(int[][] confMat) {
+        return (.0 + confMat[0][0] + confMat[1][1]) / (confMat[0][0] + confMat[0][1] + confMat[1][0] + confMat[1][1]);
+    }
+
 }
