@@ -1,6 +1,7 @@
 package jb.files;
 
 import de.bwaldvogel.liblinear.Feature;
+import de.bwaldvogel.liblinear.FeatureNode;
 import de.bwaldvogel.liblinear.InvalidInputDataException;
 import de.bwaldvogel.liblinear.Problem;
 import jb.config.Opts;
@@ -44,8 +45,8 @@ public class FileReaderNWay implements FileHelper {
 
         for (int i = 0; i < numberOfSubsets; i++) {
             if (i != numberOfSubsets - 2) {
-                Feature[][] x = new Feature[countOfSubset][rootProblem.n];
-                double[] y = new double[countOfSubset];
+                double[][] x = new double[countOfSubset][rootProblem.n];
+                int[] y = new int[countOfSubset];
                 for (int j = 0; j < countOfSubset; j++) {
                     x[j] = allObjects[j * numberOfSubsets + i].getX();
                     y[j] = allObjects[j * numberOfSubsets + i].getY();
@@ -58,7 +59,7 @@ public class FileReaderNWay implements FileHelper {
                 }
             } else {
                 for (int j = 0; j < countOfSubset; j++) {
-                    countOfValidatingObjects[getIndexOfSubspace(opts.getNumberOfSpaceParts(), allObjects[j * numberOfSubsets + 1].getX()[0].getValue(), xMin, xMax)]++;
+                    countOfValidatingObjects[getIndexOfSubspace(opts.getNumberOfSpaceParts(), allObjects[j * numberOfSubsets + 1].getX()[0], xMin, xMax)]++;
                     clfObjectsOnceSorted[j] = allObjects[j * numberOfSubsets + i].convertToOnceSorted();
                 }
             }
@@ -68,8 +69,8 @@ public class FileReaderNWay implements FileHelper {
         int counter = 0;
 
         for (int i = 0; i < countOfValidatingObjects.length; i++) {
-            Feature[][] x = new Feature[countOfValidatingObjects[i]][rootProblem.n];
-            double[] y = new double[countOfValidatingObjects[i]];
+            double[][] x = new double[countOfValidatingObjects[i]][rootProblem.n];
+            int[] y = new int[countOfValidatingObjects[i]];
             for (int j = 0; j < countOfValidatingObjects[i]; j++) {
                 ClfObject clfObjectDoubleSorted = clfObjectsOnceSorted[counter];
                 x[j] = clfObjectDoubleSorted.getX();
@@ -79,14 +80,23 @@ public class FileReaderNWay implements FileHelper {
             Problem baseProblem = getBaseProblem(opts, rootProblem, countOfValidatingObjects[i], x, y);
             validatingProblems.add(baseProblem);
         }
-        return new Dataset(trainingProblems, validatingProblems, testingProblem, xMin, xMax);
+        return new Dataset(null, 0, 0);
     }
 
-    private Problem getBaseProblem(Opts opts, Problem problem, int countOfSubset, Feature[][] x, double[] y) {
+    private Problem getBaseProblem(Opts opts, Problem problem, int countOfSubset, double[][] x, int[] y) {
         Problem baseProblem = new Problem();
         baseProblem.bias = opts.getBias();
-        baseProblem.x = x;
-        baseProblem.y = y;
+        Feature[][] features = new Feature[countOfSubset][problem.n];
+        double[] labels = new double[countOfSubset];
+        for (int i = 0; i < countOfSubset; i++) {
+            Feature[] baseFeatures = new Feature[problem.n];
+            for (int j = 0; j < problem.n; j++) {
+                baseFeatures[j] = new FeatureNode(j, x[i][j]);
+            }
+            labels[i] = y[i];
+        }
+        baseProblem.x = features;
+        baseProblem.y = labels;
         baseProblem.n = problem.n;
         baseProblem.l = countOfSubset;
         return baseProblem;
@@ -95,7 +105,11 @@ public class FileReaderNWay implements FileHelper {
     private ClfObjectDoubleSorted[] getClfObjects(Problem problem) {
         ClfObjectDoubleSorted[] result = new ClfObjectDoubleSorted[problem.l];
         for (int i = 0; i < problem.l; i++) {
-            result[i] = new ClfObjectDoubleSorted(problem.x[i], problem.y[i]);
+            double[] x = new double[problem.n];
+            for (int j = 0; j < problem.n; j++) {
+                x[j] = problem.x[i][j].getValue();
+            }
+            result[i] = new ClfObjectDoubleSorted(x, (int) problem.y[i]);
         }
         Arrays.sort(result);
         return result;
@@ -114,8 +128,8 @@ public class FileReaderNWay implements FileHelper {
             while (clfObjectsDoubleSorted[classChangeIndex].getY() == 0) {
                 classChangeIndex++;
             }
-            xMin = Math.min(clfObjectsDoubleSorted[0].getX()[0].getValue(), clfObjectsDoubleSorted[classChangeIndex].getX()[0].getValue());
-            xMax = Math.max(clfObjectsDoubleSorted[clfObjectsDoubleSorted.length - 1].getX()[0].getValue(), clfObjectsDoubleSorted[classChangeIndex - 1].getX()[0].getValue());
+            xMin = Math.min(clfObjectsDoubleSorted[0].getX()[0], clfObjectsDoubleSorted[classChangeIndex].getX()[0]);
+            xMax = Math.max(clfObjectsDoubleSorted[clfObjectsDoubleSorted.length - 1].getX()[0], clfObjectsDoubleSorted[classChangeIndex - 1].getX()[0]);
             return this;
         }
     }

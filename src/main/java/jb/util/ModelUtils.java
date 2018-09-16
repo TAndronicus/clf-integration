@@ -1,5 +1,7 @@
 package jb.util;
 
+import de.bwaldvogel.liblinear.Feature;
+import de.bwaldvogel.liblinear.FeatureNode;
 import de.bwaldvogel.liblinear.Linear;
 import de.bwaldvogel.liblinear.Model;
 import jb.data.ClfObject;
@@ -23,7 +25,11 @@ public class ModelUtils {
     }
 
     public static boolean predictsPropperly(Model model, ClfObject clfObject) {
-        double prediction = Linear.predict(model, clfObject.getX());
+        Feature[] features = new Feature[clfObject.getX().length];
+        for (int i = 0; i < clfObject.getX().length; i++) {
+            features[i] = new FeatureNode(i, clfObject.getX()[i]);
+        }
+        double prediction = Linear.predict(model, features);
         return prediction == clfObject.getY();
     }
 

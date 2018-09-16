@@ -15,8 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SimpleFileReader {
+public class SimpleFileReader implements FileHelper{
 
+    @Override
     public Dataset readFile(Opts opts) throws IOException, InvalidInputDataException {
 
         Problem rootProblem = Problem.readFromFile(new File(opts.getFilePath()), opts.getBias());

@@ -19,7 +19,7 @@ public class SimpleScoreValidator implements Validator {
         double[][] weights = new double[opts.getNumberOfSpaceParts()][clfs.size()];
 
 
-        for (int i = 0; i < clfs.size(); i++) {
+        /*for (int i = 0; i < clfs.size(); i++) {
             for (int j = 0; j < opts.getNumberOfSpaceParts(); j++) {
                 double propperlyClassified = 0;
                 for (int k = 0; k < dataset.getValidatingProblems().get(j).l; k++) {
@@ -32,7 +32,8 @@ public class SimpleScoreValidator implements Validator {
             }
         }
 
-        return new ScoreTuple(scores, weights);
+        return new ScoreTuple(scores, weights);*/
+        return null;
     }
 
 }

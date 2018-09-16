@@ -19,18 +19,16 @@ public class Problem {
         problem.l = x.length;
         problem.n = x[0].length;
         Feature[][] features = new Feature[x.length][x[0].length];
-        for (int i = 0; i < problem.l; i++) {
-                Feature[] baseFeature = new Feature[problem.n];
-            for (int j = 0; j < problem.n; j++) {
-                baseFeature[j] = new FeatureNode(j, x[i][j]);
-            }
-            features[i] = baseFeature;
-        }
-        problem.x = features;
         double[] classes = new double[problem.l];
         for (int i = 0; i < problem.l; i++) {
+            Feature[] baseFeature = new Feature[problem.n];
+            for (int j = 0; j < problem.n; j++) {
+                baseFeature[j] = new FeatureNode(j + 1, x[i][j]);
+            }
+            features[i] = baseFeature;
             classes[i] = this.y[i];
         }
+        problem.x = features;
         problem.y = classes;
         return problem;
     }

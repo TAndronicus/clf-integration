@@ -20,39 +20,27 @@ public class FileReaderNWaySameValidation implements FileHelper {
         Problem problem = Problem.readFromFile(new File(opts.getFilePath()), opts.getBias());
         ClfObject[] clfObjectDoubleSorteds = new ClfObjectDoubleSorted[problem.l];
         for (int i = 0; i < problem.l; i++) {
-            clfObjectDoubleSorteds[i] = new ClfObjectDoubleSorted(problem.x[i], problem.y[i]);
+            double[] x = new double[problem.n];
+            for (int j = 0; j < problem.n; j++) {
+                x[j] = problem.x[i][j].getValue();
+            }
+            clfObjectDoubleSorteds[i] = new ClfObjectDoubleSorted(x, (int) problem.y[i]);
         }
         Arrays.sort(clfObjectDoubleSorteds);
 
         int numberOfSubsets = opts.getNumberOfBaseClassifiers() + 2;
         int countOfSubset = problem.l / (numberOfSubsets);
-        List<Problem> trainingProblems = new ArrayList<>();
-        List<Problem> validatingProblems = new ArrayList<>();
-        Problem testingProblem = null;
+        List<jb.data.Problem> problems = new ArrayList<>();
         for (int i = 0; i < numberOfSubsets; i++) {
-            Feature[][] x = new Feature[countOfSubset][problem.n];
-            double[] y = new double[countOfSubset];
+            double[][] x = new double[countOfSubset][problem.n];
+            int[] y = new int[countOfSubset];
             for (int j = 0; j < countOfSubset; j++) {
                 x[j] = clfObjectDoubleSorteds[j * numberOfSubsets + i].getX();
                 y[j] = clfObjectDoubleSorteds[j * numberOfSubsets + i].getY();
             }
-            Problem baseProblem = new Problem();
-            baseProblem.bias = opts.getBias();
-            baseProblem.x = x;
-            baseProblem.y = y;
-            baseProblem.n = problem.n;
-            baseProblem.l = countOfSubset;
-            if (i == numberOfSubsets - 1) {
-                testingProblem = baseProblem;
-            } else if (i == numberOfSubsets - 2) {
-                for (int j = 0; j < opts.getNumberOfBaseClassifiers(); j++) {
-                    validatingProblems.add(baseProblem);
-                }
-            } else {
-                trainingProblems.add(baseProblem);
-            }
+            problems.add(new jb.data.Problem(x, y, (int) opts.getBias()));
         }
-        return new Dataset(trainingProblems, validatingProblems, testingProblem, clfObjectDoubleSorteds[0].getX()[0].getValue(), clfObjectDoubleSorteds[clfObjectDoubleSorteds.length - 1].getX()[0].getValue());
+        return new Dataset(problems, clfObjectDoubleSorteds[0].getX()[0], clfObjectDoubleSorteds[clfObjectDoubleSorteds.length - 1].getX()[0]);
     }
 
 }

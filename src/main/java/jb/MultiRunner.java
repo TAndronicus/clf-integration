@@ -16,7 +16,7 @@ import jb.selector.NBestSelector;
 import jb.selector.Selector;
 import jb.tester.IntegratedScoreTester;
 import jb.tester.MVScoreTester;
-import jb.trainer.SVMTrainer;
+import jb.trainer.SvmTrainer;
 import jb.trainer.Trainer;
 import jb.validator.SimpleScoreValidator;
 import jb.validator.Validator;
@@ -29,7 +29,7 @@ import java.util.List;
 public class MultiRunner {
 
     static FileHelper fileHelper = new FileReaderNWay();
-    static Trainer trainer = new SVMTrainer();
+    static Trainer trainer = new SvmTrainer();
     static Validator validator = new SimpleScoreValidator();
     static Selector selector = new NBestSelector();
     static Integrator integrator = new MeanIntegrator();
@@ -52,7 +52,7 @@ public class MultiRunner {
                     for (int numberOfSelectedClassifiers = 2; numberOfSelectedClassifiers <= numberOfBaseClassifiers; numberOfSelectedClassifiers++) {
                         opts.setNumberOfSelectedClassifiers(numberOfSelectedClassifiers);
                         System.out.println("File: " + file.getName());
-                        opts.setFilename(file.getPath());
+                        opts.setFilePath(file.getPath());
                         Dataset dataset = fileHelper.readFile(opts);
                         List<Model> clfs = trainer.train(dataset, opts);
                         ScoreTuple scoreTuple = validator.validate(clfs, dataset, opts);

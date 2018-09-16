@@ -29,7 +29,7 @@ public class FileReaderSameDataset implements FileHelper {
             minX = Math.min(minX, problem.x[i][0].getValue());
             maxX = Math.max(maxX, problem.x[i][0].getValue());
         }
-        return new Dataset(trainingProblems, validatingProblems, problem, minX, maxX);
+        return new Dataset(null, 0, 0);
     }
 
 }
