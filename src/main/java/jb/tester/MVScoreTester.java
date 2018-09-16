@@ -9,7 +9,7 @@ import java.util.List;
 public class MVScoreTester {
 
     public double test(List<Model> clfs, Dataset dataset) {
-        double score = 0;
+        /*double score = 0;
         for (int i = 0; i < dataset.getTestingProblem().l; i++) {
             double votingResult = 0;
             for (Model model : clfs) {
@@ -20,6 +20,7 @@ public class MVScoreTester {
             }
         }
         score /= dataset.getTestingProblem().l;
-        return score > .5 ? score : 1 - score;
+        return score > .5 ? score : 1 - score;*/
+        return 0;
     }
 }

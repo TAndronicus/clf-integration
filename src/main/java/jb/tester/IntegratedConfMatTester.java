@@ -10,7 +10,7 @@ import static jb.util.ModelUtils.switchConfMatColumns;
 public class IntegratedConfMatTester {
 
     public int[][] test(IntegratedModel integratedModel, Dataset dataset) {
-        int[][] confusionMatrix = {{0, 0}, {0, 0}};
+        /*int[][] confusionMatrix = {{0, 0}, {0, 0}};
         int realIndex = 0;
         int predictedIndex = 0;
         for (int i = 0; i < dataset.getTestingProblem().l; i++) {
@@ -23,7 +23,8 @@ public class IntegratedConfMatTester {
         if (ModelUtils.getScoreFromConfMat(confusionMatrix) < .5) {
             switchConfMatColumns(confusionMatrix);
         }
-        return confusionMatrix;
+        return confusionMatrix;*/
+        return null;
     }
 
 
