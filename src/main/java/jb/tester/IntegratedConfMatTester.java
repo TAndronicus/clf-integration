@@ -2,6 +2,7 @@ package jb.tester;
 
 import jb.data.Dataset;
 import jb.data.IntegratedModel;
+import jb.util.ModelUtils;
 
 import static jb.util.ModelUtils.getIndexOfSubspace;
 
@@ -17,6 +18,13 @@ public class IntegratedConfMatTester {
             realIndex = dataset.getTestingProblem().y[i] == 1 ? 1 : 0;
             predictedIndex = value > dataset.getTestingProblem().x[i][1].getValue() ? 1 : 0;
             confusionMatrix[realIndex][predictedIndex]++;
+        }
+        if (ModelUtils.getScoreFromConfMat(confusionMatrix) < .5) {
+            for (int i = 0; i < confusionMatrix.length; i++) {
+                int temp = confusionMatrix[i][0];
+                confusionMatrix[i][0] = confusionMatrix[i][1];
+                confusionMatrix[i][1] = temp;
+            }
         }
         return confusionMatrix;
     }

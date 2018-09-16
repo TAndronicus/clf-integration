@@ -5,6 +5,7 @@ import de.bwaldvogel.liblinear.FeatureNode;
 import de.bwaldvogel.liblinear.Problem;
 import jb.data.Dataset;
 import jb.data.IntegratedModel;
+import jb.util.ModelUtils;
 import org.junit.jupiter.api.Test;
 import static org.hamcrest.Matchers.*;
 
@@ -40,8 +41,7 @@ public class IntegratedConfMatTesterTest {
         // when
         IntegratedConfMatTester integratedConfMatTester = new IntegratedConfMatTester();
         int[][] confMat = integratedConfMatTester.test(integratedModel, dataset);
-        double scoreFromConfMat = (.0 + confMat[0][0] + confMat[1][1]) / (confMat[0][0] + confMat[0][1] + confMat[1][0] + confMat[1][1]);
-        scoreFromConfMat = scoreFromConfMat > .5 ? scoreFromConfMat : 1 - scoreFromConfMat;
+        double scoreFromConfMat = ModelUtils.getScoreFromConfMat(confMat);
 
         // then
         assertThat(scoreFromConfMat, is(equalTo(score)));
