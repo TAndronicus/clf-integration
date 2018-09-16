@@ -35,4 +35,12 @@ public class ModelUtils {
         return (.0 + confMat[0][0] + confMat[1][1]) / (confMat[0][0] + confMat[0][1] + confMat[1][0] + confMat[1][1]);
     }
 
+    public static void switchConfMatColumns(int[][] confusionMatrix) {
+        for (int i = 0; i < confusionMatrix.length; i++) {
+            int temp = confusionMatrix[i][0];
+            confusionMatrix[i][0] = confusionMatrix[i][1];
+            confusionMatrix[i][1] = temp;
+        }
+    }
+
 }

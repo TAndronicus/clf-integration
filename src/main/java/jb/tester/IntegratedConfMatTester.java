@@ -5,6 +5,7 @@ import jb.data.IntegratedModel;
 import jb.util.ModelUtils;
 
 import static jb.util.ModelUtils.getIndexOfSubspace;
+import static jb.util.ModelUtils.switchConfMatColumns;
 
 public class IntegratedConfMatTester {
 
@@ -20,12 +21,10 @@ public class IntegratedConfMatTester {
             confusionMatrix[realIndex][predictedIndex]++;
         }
         if (ModelUtils.getScoreFromConfMat(confusionMatrix) < .5) {
-            for (int i = 0; i < confusionMatrix.length; i++) {
-                int temp = confusionMatrix[i][0];
-                confusionMatrix[i][0] = confusionMatrix[i][1];
-                confusionMatrix[i][1] = temp;
-            }
+            switchConfMatColumns(confusionMatrix);
         }
         return confusionMatrix;
     }
+
+
 }
