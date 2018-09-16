@@ -23,7 +23,7 @@ public class FileReaderNWayTest {
     private static final int numberOfSpaceParts = 3;
     private static Opts opts = null;
 
-    @BeforeAll
+    /*@BeforeAll
     public static void initialize() {
 
         opts = Opts.builder().bias(bias).numberOfBaseClassifiers(numberOfBaseClassifiers).numberOfSpaceParts(numberOfSpaceParts).build();
@@ -155,5 +155,5 @@ public class FileReaderNWayTest {
                         (dataset.getMaxX() - dataset.getMinX()) - Constants.EPSILON), is(equalTo(i)));
             }
         }
-    }
+    }*/
 }

@@ -18,7 +18,7 @@ public class FileReaderNWaySameValidationTest {
     private static final int numberOfBaseClassifiers = 3;
     private static Opts opts = null;
 
-    @BeforeAll
+    /*@BeforeAll
     public static void initialize() {
         opts = Opts.builder().filename(filename).bias(bias).numberOfBaseClassifiers(3).build();
     }
@@ -68,5 +68,5 @@ public class FileReaderNWaySameValidationTest {
             assertThat(dataset.getTrainingProblems().get(i).y[1], is(lessThanOrEqualTo(dataset.getTestingProblem().y[1])));
         }
 
-    }
+    }*/
 }
