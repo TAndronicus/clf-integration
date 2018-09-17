@@ -1,4 +1,4 @@
-package jb.files;
+package jb.files.serialization;
 
 import de.bwaldvogel.liblinear.Linear;
 import de.bwaldvogel.liblinear.Model;
