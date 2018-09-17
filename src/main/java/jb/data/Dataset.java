@@ -42,7 +42,7 @@ public class Dataset {
             }
             validatingProblems.add(new Problem(x, y));
         }
-        return new ValidatingTestingTuple(validatingProblems, problems.get(opts.getPermutation()[1]));
+        return new ValidatingTestingTuple(validatingProblems, problems.get(opts.getPermutation()[1]), this.minX, this.maxX);
     }
 
 }

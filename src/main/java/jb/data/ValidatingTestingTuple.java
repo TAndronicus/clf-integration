@@ -11,5 +11,7 @@ public class ValidatingTestingTuple {
 
     private List<Problem> validationProblems;
     private Problem testingProblem;
+    private double minX;
+    private double maxX;
 
 }
