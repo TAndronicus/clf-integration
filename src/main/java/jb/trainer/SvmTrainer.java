@@ -16,7 +16,7 @@ public class SvmTrainer implements Trainer{
         Parameter parameter = new Parameter(opts.getSolverType(), opts.getC(), opts.getEps());
         List<Model> clfs = new ArrayList<>();
         for (jb.data.Problem problem : dataset.getProblems()) {
-            clfs.add(Linear.train(problem.convertToLibLinearProblem(), parameter));
+            clfs.add(Linear.train(problem.convertToLibLinearProblem(opts), parameter));
         }
         return clfs;
     }

@@ -38,7 +38,7 @@ public class FileReaderNWaySameValidation implements FileHelper {
                 x[j] = clfObjectDoubleSorteds[j * numberOfSubsets + i].getX();
                 y[j] = clfObjectDoubleSorteds[j * numberOfSubsets + i].getY();
             }
-            problems.add(new jb.data.Problem(x, y, (int) opts.getBias()));
+            problems.add(new jb.data.Problem(x, y));
         }
         return new Dataset(problems, clfObjectDoubleSorteds[0].getX()[0], clfObjectDoubleSorteds[clfObjectDoubleSorteds.length - 1].getX()[0]);
     }

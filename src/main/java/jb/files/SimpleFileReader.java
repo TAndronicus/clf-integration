@@ -38,7 +38,7 @@ public class SimpleFileReader implements FileHelper{
                 x[j] = allObjects[j * numberOfSubsets + i].getX();
                 y[j] = allObjects[j * numberOfSubsets + i].getY();
             }
-            problems.add(new jb.data.Problem(x, y, (int) opts.getBias()));
+            problems.add(new jb.data.Problem(x, y));
         }
 
         return new Dataset(problems, xMin, xMax);

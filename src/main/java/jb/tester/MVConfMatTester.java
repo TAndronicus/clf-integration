@@ -18,7 +18,7 @@ public class MVConfMatTester {
             realIndex = problem.getY()[i] == 1 ? 1 : 0;
             double votingResult = 0;
             for (Model model : clfs) {
-                votingResult += Linear.predict(model, problem.convertToLibLinearProblem().x[i]);
+//                votingResult += Linear.predict(model, problem.convertToLibLinearProblem().x[i]);
             }
             predictedIndex = votingResult / clfs.size() > .5 ? 1 : 0;
             confMat[realIndex][predictedIndex]++;

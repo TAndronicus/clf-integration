@@ -2,6 +2,7 @@ package jb.data;
 
 import de.bwaldvogel.liblinear.Feature;
 import de.bwaldvogel.liblinear.FeatureNode;
+import jb.config.Opts;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -9,13 +10,12 @@ import lombok.Data;
 @AllArgsConstructor
 public class Problem {
 
-    double[][] x;
-    int[] y;
-    int bias;
+    private double[][] x;
+    private int[] y;
 
-    public de.bwaldvogel.liblinear.Problem convertToLibLinearProblem() {
+    public de.bwaldvogel.liblinear.Problem convertToLibLinearProblem(Opts opts) {
         de.bwaldvogel.liblinear.Problem problem = new de.bwaldvogel.liblinear.Problem();
-        problem.bias = this.bias;
+        problem.bias = opts.getBias();
         problem.l = x.length;
         problem.n = x[0].length;
         Feature[][] features = new Feature[x.length][x[0].length];
