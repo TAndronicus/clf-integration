@@ -4,7 +4,7 @@ import de.bwaldvogel.liblinear.Feature;
 import de.bwaldvogel.liblinear.FeatureNode;
 import de.bwaldvogel.liblinear.Linear;
 import de.bwaldvogel.liblinear.Model;
-import jb.data.ClfObject;
+import jb.data.clfobj.ClfObject;
 
 import java.util.List;
 

@@ -1,6 +1,5 @@
-package jb.data;
+package jb.data.clfobj;
 
-import de.bwaldvogel.liblinear.Feature;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package jb.data;
+package jb.data.clfobj;
 
 public class ClfObjectOnceSorted extends ClfObject {
 

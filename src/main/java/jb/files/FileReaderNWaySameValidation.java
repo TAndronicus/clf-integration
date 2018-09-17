@@ -4,9 +4,9 @@ import de.bwaldvogel.liblinear.Feature;
 import de.bwaldvogel.liblinear.InvalidInputDataException;
 import de.bwaldvogel.liblinear.Problem;
 import jb.config.Opts;
-import jb.data.ClfObject;
-import jb.data.ClfObjectDoubleSorted;
 import jb.data.Dataset;
+import jb.data.clfobj.ClfObject;
+import jb.data.clfobj.ClfObjectDoubleSorted;
 
 import java.io.File;
 import java.io.IOException;
