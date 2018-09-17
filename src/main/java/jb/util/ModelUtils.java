@@ -61,4 +61,8 @@ public class ModelUtils {
         return nominator / denominator;
     }
 
+    public static double calculateRelativeValue(double absoluteValue, double minValue, double maxValue) {
+        return (absoluteValue - minValue) / (maxValue - minValue);
+    }
+
 }
