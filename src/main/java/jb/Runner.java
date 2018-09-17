@@ -4,7 +4,7 @@ import de.bwaldvogel.liblinear.InvalidInputDataException;
 import de.bwaldvogel.liblinear.Model;
 import de.bwaldvogel.liblinear.SolverType;
 import jb.config.Opts;
-import jb.data.Dataset;
+import jb.data.*;
 import jb.files.FileHelper;
 import jb.files.SimpleFileReader;
 import jb.files.serialization.ModelReader;
@@ -13,6 +13,7 @@ import jb.integrator.Integrator;
 import jb.integrator.MeanIntegrator;
 import jb.selector.NBestSelector;
 import jb.selector.Selector;
+import jb.tester.IntegratedScoreTester;
 import jb.trainer.SvmTrainer;
 import jb.trainer.Trainer;
 import jb.validator.SimpleScoreValidator;
@@ -40,12 +41,13 @@ public class Runner {
         modelWriter.saveModels(clfs, opts);
         List<Model> restoredClfs = modelReader.read(opts);
         System.out.println(restoredClfs.size());
+        ValidatingTestingTuple validatingTestingTuple = dataset.getValidatingTestingTuple(opts);
 
-//        ScoreTuple scoreTuple = validator.validate(clfs, dataset, opts);
-  //      SelectedTuple selectedTuple = selector.select(scoreTuple, opts);
-    //    IntegratedModel integratedModel = integrator.integrate(selectedTuple, clfs, opts);
-      //  IntegratedScoreTester integratedScoreTester = new IntegratedScoreTester();
-        //System.out.println(integratedScoreTester.test(integratedModel, dataset));
+        ScoreTuple scoreTuple = validator.validate(clfs, validatingTestingTuple, opts);
+        SelectedTuple selectedTuple = selector.select(scoreTuple, opts);
+        IntegratedModel integratedModel = integrator.integrate(selectedTuple, clfs, opts);
+        IntegratedScoreTester integratedScoreTester = new IntegratedScoreTester();
+        System.out.println(integratedScoreTester.test(integratedModel, validatingTestingTuple, opts));
 
     }
 
