@@ -27,7 +27,7 @@ public class ModelUtils {
     public static boolean predictsPropperly(Model model, ClfObject clfObject) {
         Feature[] features = new Feature[clfObject.getX().length];
         for (int i = 0; i < clfObject.getX().length; i++) {
-            features[i] = new FeatureNode(i, clfObject.getX()[i]);
+            features[i] = new FeatureNode(i + 1, clfObject.getX()[i]);
         }
         double prediction = Linear.predict(model, features);
         return prediction == clfObject.getY();
