@@ -23,6 +23,7 @@ import jb.validator.Validator;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
 
@@ -42,9 +43,38 @@ public class MultiRunner {
         int[] numbersOfBaseClassifiers = {3, 5, 7, 9};
         int[] numbersOfSpaceParts = {3, 4, 5, 6, 7, 8, 9, 10};
         Date before = new Date();
+        IntegratedScoreTester integratedScoreTester = new IntegratedScoreTester();
 
+        for (int numberOfBaseClassifiers : numbersOfBaseClassifiers) {
+            opts.setNumberOfBaseClassifiers(numberOfBaseClassifiers);
+            PrintWriter printWriter = new PrintWriter(resultPath + "/" + numberOfBaseClassifiers);
+            StringBuilder firstLine = new StringBuilder(",subspaces");
+            StringBuilder secondLine = new StringBuilder("selected classifiers,filename");
+            for (int numberOfSpaceParts : numbersOfSpaceParts) {
+                firstLine.append("," + numberOfSpaceParts);
+                secondLine.append(",score");
+            }
+            printWriter.println(firstLine.toString());
+            printWriter.println(secondLine.toString());
+            StringBuilder rest = new StringBuilder();
+            for (int numberOfSelectedClassifiers = 2; numberOfSelectedClassifiers <= numberOfBaseClassifiers; numberOfSelectedClassifiers++) {
+                opts.setNumberOfSelectedClassifiers(numberOfSelectedClassifiers);
+                for (File file : (new File(sourcePath)).listFiles()) {
+                    opts.setFilePath(file.getPath());
+                    rest.append("" + numberOfSelectedClassifiers + "," + file.getName());
+                    for (int numberOfSpaceParts : numbersOfSpaceParts) {
+                        opts.setNumberOfSpaceParts(numberOfSpaceParts);
 
-        for (File file : (new File(sourcePath)).listFiles()) {
+                        rest.append(",s");
+                    }
+                    rest.append("\n");
+                }
+            }
+            printWriter.println(rest.toString());
+        }
+
+        /*for (File file : (new File(sourcePath)).listFiles()) {
+            opts.setFilePath(file.getPath());
             for (int numberOfSpaceParts : numbersOfSpaceParts) {
                 opts.setNumberOfSpaceParts(numberOfSpaceParts);
                 for (int numberOfBaseClassifiers : numbersOfBaseClassifiers) {
@@ -65,7 +95,7 @@ public class MultiRunner {
                     }
                 }
             }
-        }
+        }*/
 
         Date after = new Date();
 
