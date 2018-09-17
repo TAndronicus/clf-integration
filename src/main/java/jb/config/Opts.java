@@ -43,6 +43,11 @@ public class Opts {
      */
     private double eps;
 
+    /**
+     *
+     */
+    private int[] permutation;
+
     public String getFilename() {
         String[] pathParts = this.filePath.split("/");
         String[] nameParts = pathParts[pathParts.length - 1].split("[.]");
