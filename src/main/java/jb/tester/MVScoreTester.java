@@ -2,25 +2,26 @@ package jb.tester;
 
 import de.bwaldvogel.liblinear.Linear;
 import de.bwaldvogel.liblinear.Model;
-import jb.data.Dataset;
+import jb.data.Problem;
+import jb.data.ValidatingTestingTuple;
 
 import java.util.List;
 
 public class MVScoreTester {
 
-    public double test(List<Model> clfs, Dataset dataset) {
-        /*double score = 0;
-        for (int i = 0; i < dataset.getTestingProblem().l; i++) {
+    public double test(List<Model> clfs, ValidatingTestingTuple validatingTestingTuple) {
+        double score = 0;
+        Problem problem = validatingTestingTuple.getTestingProblem();
+        for (int i = 0; i < problem.getY().length; i++) {
             double votingResult = 0;
             for (Model model : clfs) {
-                votingResult += Linear.predict(model, dataset.getTestingProblem().x[i]);
+                votingResult += Linear.predict(model, problem.getObjectAsFeatures(i));
             }
-            if (votingResult / clfs.size() > .5 ^ dataset.getTestingProblem().y[i] == 1) {
+            if (votingResult / clfs.size() > .5 ^ problem.getY()[i] == 1) {
                 score++;
             }
         }
-        score /= dataset.getTestingProblem().l;
-        return score > .5 ? score : 1 - score;*/
-        return 0;
+        score /= problem.getY().length;
+        return score > .5 ? score : 1 - score;
     }
 }
