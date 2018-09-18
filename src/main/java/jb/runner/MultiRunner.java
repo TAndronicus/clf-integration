@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import static jb.util.MathUtils.getCombinationsOfTwo;
 
@@ -43,28 +44,22 @@ public class MultiRunner {
         String sourcePath = "src/main/resources/target";
         String resultPath = "src/main/resources/results";
         Opts opts = Opts.builder().bias(1).solverType(SolverType.L2R_LR).C(1).eps(.01).build();
-        int[] numbersOfBaseClassifiers = {3, 5, 7, 9};
-        int[] numbersOfSpaceParts = {3, 4, 5, 6, 7, 8, 9, 10};
+        int[] numbersOfBaseClassifiers = {3, 5};//, 7, 9};
+        int[] numbersOfSpaceParts = {3, 4};//, 5, 6, 7, 8, 9, 10};
         Date before = new Date();
         IntegratedScoreTester integratedScoreTester = new IntegratedScoreTester();
 
         for (int numberOfBaseClassifiers : numbersOfBaseClassifiers) {
             opts.setNumberOfBaseClassifiers(numberOfBaseClassifiers);
             PrintWriter printWriter = new PrintWriter(resultPath + "/" + numberOfBaseClassifiers + ".csv");
-            StringBuilder firstLine = new StringBuilder(",subspaces");
-            StringBuilder secondLine = new StringBuilder("selected classifiers,filename");
-            for (int numberOfSpaceParts : numbersOfSpaceParts) {
-                firstLine.append(",").append(numberOfSpaceParts);
-                secondLine.append(",score");
-            }
-            printWriter.println(firstLine.toString());
-            printWriter.println(secondLine.toString());
-            StringBuilder rest = new StringBuilder();
+            StringBuilder res = initializeResultStringBuilder(numbersOfSpaceParts);
             for (int numberOfSelectedClassifiers = 2; numberOfSelectedClassifiers <= numberOfBaseClassifiers; numberOfSelectedClassifiers++) {
                 opts.setNumberOfSelectedClassifiers(numberOfSelectedClassifiers);
-                for (File file : (new File(sourcePath)).listFiles()) {
-                    opts.setFilePath(file.getPath());
-                    rest.append("" + numberOfSelectedClassifiers + "," + file.getName());
+                File[] files = new File(sourcePath).listFiles();
+                for (int numberOfFile = 0; numberOfFile < files.length; numberOfFile++) {
+                    opts.setFilePath(files[numberOfFile].getPath());
+                    if (numberOfFile == 0) res.append(numberOfSelectedClassifiers);
+                    res.append("," + files[numberOfFile].getName().split("_")[0]);
                     for (int numberOfSpaceParts : numbersOfSpaceParts) {
                         opts.setNumberOfSpaceParts(numberOfSpaceParts);
                         Dataset dataset = fileHelper.readFile(opts);
@@ -82,12 +77,12 @@ public class MultiRunner {
                             score += integratedScoreTester.test(integratedModel, validatingTestingTuple, opts);
                         }
                         score /= combinations.size();
-                        rest.append(",").append(score);
+                        res.append(",").append(score);
                     }
-                    rest.append("\n");
+                    res.append("\n");
                 }
             }
-            printWriter.println(rest.toString());
+            printWriter.println(res.toString());
             printWriter.flush();
             printWriter.close();
         }
@@ -120,5 +115,14 @@ public class MultiRunner {
 
         System.out.println("Took " + ((after.getTime() - before.getTime()) / 1000));
 
+    }
+
+    private static StringBuilder initializeResultStringBuilder(int[] numbersOfSpaceParts) {
+        StringBuilder res = new StringBuilder(",subspaces");
+        IntStream.of(numbersOfSpaceParts).mapToObj(i -> "," + i).forEach(res::append);
+        res.append("\nselected classifiers,filename");
+        IntStream.of(numbersOfSpaceParts).mapToObj(i -> ",score").forEach(res::append);
+        res.append("\n");
+        return res;
     }
 }
