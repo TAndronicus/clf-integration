@@ -1,5 +1,8 @@
 package jb.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MathUtils {
 
     public static double vectorProduct(double[] v1, double[] v2) {
@@ -16,6 +19,16 @@ public class MathUtils {
             trace += v;
         }
         return trace;
+    }
+
+    public static List<int[]> getCombinationsOfTwo(int range) {
+        List<int[]> combinations = new ArrayList<>();
+        for (int i = 0; i < range; i++) {
+            for (int j = 0; j < range; j++) {
+                if (i != j) combinations.add(new int[]{i, j});
+            }
+        }
+        return combinations;
     }
 
 }
