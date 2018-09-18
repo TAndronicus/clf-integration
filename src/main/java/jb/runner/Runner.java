@@ -1,4 +1,4 @@
-package jb;
+package jb.runner;
 
 import de.bwaldvogel.liblinear.InvalidInputDataException;
 import de.bwaldvogel.liblinear.Model;
