@@ -42,7 +42,6 @@ public class Runner {
         List<Model> restoredClfs = modelReader.read(opts);
         System.out.println(restoredClfs.size());
         ValidatingTestingTuple validatingTestingTuple = dataset.getValidatingTestingTuple(opts);
-
         ScoreTuple scoreTuple = validator.validate(clfs, validatingTestingTuple, opts);
         SelectedTuple selectedTuple = selector.select(scoreTuple, opts);
         IntegratedModel integratedModel = integrator.integrate(selectedTuple, clfs, opts);

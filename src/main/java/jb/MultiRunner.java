@@ -4,18 +4,16 @@ import de.bwaldvogel.liblinear.InvalidInputDataException;
 import de.bwaldvogel.liblinear.Model;
 import de.bwaldvogel.liblinear.SolverType;
 import jb.config.Opts;
-import jb.data.Dataset;
-import jb.data.IntegratedModel;
-import jb.data.ScoreTuple;
-import jb.data.SelectedTuple;
+import jb.data.*;
 import jb.files.FileHelper;
-import jb.files.FileReaderNWay;
+import jb.files.SimpleFileReader;
+import jb.files.serialization.ModelReader;
+import jb.files.serialization.ModelWriter;
 import jb.integrator.Integrator;
 import jb.integrator.MeanIntegrator;
 import jb.selector.NBestSelector;
 import jb.selector.Selector;
 import jb.tester.IntegratedScoreTester;
-import jb.tester.MVScoreTester;
 import jb.trainer.SvmTrainer;
 import jb.trainer.Trainer;
 import jb.validator.SimpleScoreValidator;
@@ -27,13 +25,18 @@ import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
 
+import static jb.util.MathUtils.getCombinationsOfTwo;
+
 public class MultiRunner {
 
-    static FileHelper fileHelper = new FileReaderNWay();
+    static FileHelper fileHelper = new SimpleFileReader();
     static Trainer trainer = new SvmTrainer();
+    static ModelReader modelReader = new ModelReader();
+    static ModelWriter modelWriter = new ModelWriter();
     static Validator validator = new SimpleScoreValidator();
     static Selector selector = new NBestSelector();
     static Integrator integrator = new MeanIntegrator();
+    static IntegratedScoreTester integratedScoreTester = new IntegratedScoreTester();
 
     public static void main(String[] args) throws IOException, InvalidInputDataException {
 
@@ -47,11 +50,11 @@ public class MultiRunner {
 
         for (int numberOfBaseClassifiers : numbersOfBaseClassifiers) {
             opts.setNumberOfBaseClassifiers(numberOfBaseClassifiers);
-            PrintWriter printWriter = new PrintWriter(resultPath + "/" + numberOfBaseClassifiers);
+            PrintWriter printWriter = new PrintWriter(resultPath + "/" + numberOfBaseClassifiers + ".csv");
             StringBuilder firstLine = new StringBuilder(",subspaces");
             StringBuilder secondLine = new StringBuilder("selected classifiers,filename");
             for (int numberOfSpaceParts : numbersOfSpaceParts) {
-                firstLine.append("," + numberOfSpaceParts);
+                firstLine.append(",").append(numberOfSpaceParts);
                 secondLine.append(",score");
             }
             printWriter.println(firstLine.toString());
@@ -64,13 +67,29 @@ public class MultiRunner {
                     rest.append("" + numberOfSelectedClassifiers + "," + file.getName());
                     for (int numberOfSpaceParts : numbersOfSpaceParts) {
                         opts.setNumberOfSpaceParts(numberOfSpaceParts);
-
-                        rest.append(",s");
+                        Dataset dataset = fileHelper.readFile(opts);
+                        List<Model> clfs = trainer.train(dataset, opts);
+                        modelWriter.saveModels(clfs, opts);
+                        List<int[]> combinations = getCombinationsOfTwo(numberOfBaseClassifiers + 2);
+                        double score = 0;
+                        for (int[] combination : combinations) {
+                            opts.setPermutation(combination);
+                            List<Model> restoredClfs = modelReader.read(opts);
+                            ValidatingTestingTuple validatingTestingTuple = dataset.getValidatingTestingTuple(opts);
+                            ScoreTuple scoreTuple = validator.validate(restoredClfs, validatingTestingTuple, opts);
+                            SelectedTuple selectedTuple = selector.select(scoreTuple, opts);
+                            IntegratedModel integratedModel = integrator.integrate(selectedTuple, restoredClfs, opts);
+                            score += integratedScoreTester.test(integratedModel, validatingTestingTuple, opts);
+                        }
+                        score /= combinations.size();
+                        rest.append(",").append(score);
                     }
                     rest.append("\n");
                 }
             }
             printWriter.println(rest.toString());
+            printWriter.flush();
+            printWriter.close();
         }
 
         /*for (File file : (new File(sourcePath)).listFiles()) {
