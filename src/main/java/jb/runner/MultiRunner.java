@@ -13,7 +13,8 @@ import jb.integrator.Integrator;
 import jb.integrator.MeanIntegrator;
 import jb.selector.NBestSelector;
 import jb.selector.Selector;
-import jb.tester.IntegratedScoreTester;
+import jb.tester.IntegratedConfMatTester;
+import jb.tester.MvConfMatTester;
 import jb.trainer.SvmTrainer;
 import jb.trainer.Trainer;
 import jb.validator.SimpleScoreValidator;
@@ -24,9 +25,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 import static jb.util.MathUtils.getCombinationsOfTwo;
+import static jb.util.ModelUtils.calculateMccFromConfMat;
+import static jb.util.ModelUtils.calculateScoreFromConfMat;
+import static jb.util.ModelUtils.pickModels;
 
 public class MultiRunner {
 
@@ -37,7 +42,10 @@ public class MultiRunner {
     private static Validator validator = new SimpleScoreValidator();
     private static Selector selector = new NBestSelector();
     private static Integrator integrator = new MeanIntegrator();
-    private static IntegratedScoreTester integratedScoreTester = new IntegratedScoreTester();
+    private static IntegratedConfMatTester integratedConfMatTester = new IntegratedConfMatTester();
+    private static MvConfMatTester mvConfMatTester = new MvConfMatTester();
+
+    private static final int numberOfStatistics = 4;
 
     public static void main(String[] args) throws IOException, InvalidInputDataException {
 
@@ -46,7 +54,6 @@ public class MultiRunner {
         Opts opts = Opts.builder().bias(1).solverType(SolverType.L2R_LR).C(1).eps(.01).build();
         int[] numbersOfBaseClassifiers = {3, 5};//, 7, 9};
         int[] numbersOfSpaceParts = {3, 4};//, 5, 6, 7, 8, 9, 10};
-        IntegratedScoreTester integratedScoreTester = new IntegratedScoreTester();
         Date before = new Date();
 
         for (int numberOfBaseClassifiers : numbersOfBaseClassifiers) {
@@ -66,18 +73,22 @@ public class MultiRunner {
                             List<Model> clfs = trainer.train(dataset, opts);
                             modelWriter.saveModels(clfs, opts);
                             List<int[]> combinations = getCombinationsOfTwo(numberOfBaseClassifiers + 2);
-                            double score = 0;
+                            double[] statistics = new double[numberOfStatistics]; // integratedScore, integratedMcc, mvScore, mvMcc
                             for (int[] combination : combinations) {
                                 opts.setPermutation(combination);
-                                List<Model> restoredClfs = modelReader.read(opts);
+                                List<Model> restoredClfs = pickModels(clfs, opts);
                                 ValidatingTestingTuple validatingTestingTuple = dataset.getValidatingTestingTuple(opts);
                                 ScoreTuple scoreTuple = validator.validate(restoredClfs, validatingTestingTuple, opts);
                                 SelectedTuple selectedTuple = selector.select(scoreTuple, opts);
                                 IntegratedModel integratedModel = integrator.integrate(selectedTuple, restoredClfs, opts);
-                                score += integratedScoreTester.test(integratedModel, validatingTestingTuple, opts);
+                                int[][] integratedConfMat = integratedConfMatTester.test(integratedModel, validatingTestingTuple, opts);
+                                statistics[0] += calculateScoreFromConfMat(integratedConfMat);
+                                statistics[1] += calculateMccFromConfMat(integratedConfMat);
+                                int[][] mvConfMat = mvConfMatTester.test(restoredClfs, validatingTestingTuple, opts);
+                                statistics[2] += calculateScoreFromConfMat(mvConfMat);
+                                statistics[3] += calculateMccFromConfMat(mvConfMat);
                             }
-                            score /= combinations.size();
-                            res.append(",").append(score);
+                            DoubleStream.of(statistics).map(i -> i / combinations.size()).mapToObj(i -> "," + i).forEach(res::append);
                         }
                         res.append("\n");
                     }
@@ -94,9 +105,9 @@ public class MultiRunner {
 
     private static StringBuilder initializeResultStringBuilder(int[] numbersOfSpaceParts) {
         StringBuilder res = new StringBuilder(",subspaces");
-        IntStream.of(numbersOfSpaceParts).mapToObj(i -> "," + i).forEach(res::append);
+        IntStream.of(numbersOfSpaceParts).mapToObj(i -> "," + i + new String(new char[numberOfStatistics - 1]).replace("\0", ",")).forEach(res::append);
         res.append("\nselected classifiers,filename");
-        IntStream.of(numbersOfSpaceParts).mapToObj(i -> ",score").forEach(res::append);
+        IntStream.of(numbersOfSpaceParts).mapToObj(i -> ",i score,i mcc,mv score,mv mcc").forEach(res::append);
         res.append("\n");
         return res;
     }
