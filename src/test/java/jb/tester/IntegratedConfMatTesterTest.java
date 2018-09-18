@@ -41,7 +41,7 @@ public class IntegratedConfMatTesterTest {
         // when
         IntegratedConfMatTester integratedConfMatTester = new IntegratedConfMatTester();
         //int[][] confMat = integratedConfMatTester.test(integratedModel, dataset);
-        //double scoreFromConfMat = ModelUtils.getScoreFromConfMat(confMat);
+        //double scoreFromConfMat = ModelUtils.calculateScoreFromConfMat(confMat);
 
         // then
         /*assertThat(scoreFromConfMat, is(equalTo(score)));
