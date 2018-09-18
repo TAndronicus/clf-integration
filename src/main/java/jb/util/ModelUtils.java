@@ -4,8 +4,10 @@ import de.bwaldvogel.liblinear.Feature;
 import de.bwaldvogel.liblinear.FeatureNode;
 import de.bwaldvogel.liblinear.Linear;
 import de.bwaldvogel.liblinear.Model;
+import jb.config.Opts;
 import jb.data.clfobj.ClfObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static jb.config.Constants.EPSILON;
@@ -37,7 +39,7 @@ public class ModelUtils {
         return (int) (numberOfSpaceParts * (xSample - minX) / (maxX - minX) - EPSILON);
     }
 
-    public static double getScoreFromConfMat(int[][] confMat) {
+    public static double calculateScoreFromConfMat(int[][] confMat) {
         return (.0 + confMat[0][0] + confMat[1][1]) / (confMat[0][0] + confMat[0][1] + confMat[1][0] + confMat[1][1]);
     }
 
@@ -51,18 +53,24 @@ public class ModelUtils {
 
     public static double calculateMccFromConfMat(int[][] confMat) {
         double nominator = .0 + confMat[0][0] * confMat[1][1] - confMat[0][1] * confMat[1][0];
-        double denominatorSq = .0;
+        double denominatorSq = 1.0;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 2; j++) {
                 denominatorSq *= (confMat[i][i] + confMat[j][1 - j]);
             }
         }
         double denominator = Math.sqrt(denominatorSq);
-        return nominator / denominator;
+        return denominator == 0 ? 0 : nominator / denominator;
     }
 
     public static double calculateRelativeValue(double absoluteValue, double minValue, double maxValue) {
         return (absoluteValue - minValue) / (maxValue - minValue);
+    }
+
+    public static List<Model> pickModels(List<Model> clfs, Opts opts) {
+        List<Model> pickedModels = new ArrayList<>();
+        for (int i = 0; i < clfs.size(); i++) if (i != opts.getPermutation()[0] && i != opts.getPermutation()[1]) pickedModels.add(clfs.get(i));
+        return pickedModels;
     }
 
 }

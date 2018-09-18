@@ -1,6 +1,5 @@
 package jb.util;
 
-import jb.tester.IntegratedConfMatTester;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -15,7 +14,7 @@ public class ModelUtilsTest {
         int[][] confMat = {{(int) (Math.random() * 100), (int) (Math.random() * 100)}, {(int) (Math.random() * 100), (int) (Math.random() * 100)}};
 
         // when
-        double score = ModelUtils.getScoreFromConfMat(confMat);
+        double score = ModelUtils.calculateScoreFromConfMat(confMat);
 
         // then
         assertThat(score, is(equalTo((.0 + confMat[0][0] + confMat[1][1]) / (confMat[0][0] + confMat[0][1] + confMat[1][0] + confMat[1][1]))));
