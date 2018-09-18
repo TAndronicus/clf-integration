@@ -30,14 +30,14 @@ import static jb.util.MathUtils.getCombinationsOfTwo;
 
 public class MultiRunner {
 
-    static FileHelper fileHelper = new SimpleFileReader();
-    static Trainer trainer = new SvmTrainer();
-    static ModelReader modelReader = new ModelReader();
-    static ModelWriter modelWriter = new ModelWriter();
-    static Validator validator = new SimpleScoreValidator();
-    static Selector selector = new NBestSelector();
-    static Integrator integrator = new MeanIntegrator();
-    static IntegratedScoreTester integratedScoreTester = new IntegratedScoreTester();
+    private static FileHelper fileHelper = new SimpleFileReader();
+    private static Trainer trainer = new SvmTrainer();
+    private static ModelReader modelReader = new ModelReader();
+    private static ModelWriter modelWriter = new ModelWriter();
+    private static Validator validator = new SimpleScoreValidator();
+    private static Selector selector = new NBestSelector();
+    private static Integrator integrator = new MeanIntegrator();
+    private static IntegratedScoreTester integratedScoreTester = new IntegratedScoreTester();
 
     public static void main(String[] args) throws IOException, InvalidInputDataException {
 
@@ -46,73 +46,48 @@ public class MultiRunner {
         Opts opts = Opts.builder().bias(1).solverType(SolverType.L2R_LR).C(1).eps(.01).build();
         int[] numbersOfBaseClassifiers = {3, 5};//, 7, 9};
         int[] numbersOfSpaceParts = {3, 4};//, 5, 6, 7, 8, 9, 10};
-        Date before = new Date();
         IntegratedScoreTester integratedScoreTester = new IntegratedScoreTester();
+        Date before = new Date();
 
         for (int numberOfBaseClassifiers : numbersOfBaseClassifiers) {
             opts.setNumberOfBaseClassifiers(numberOfBaseClassifiers);
-            PrintWriter printWriter = new PrintWriter(resultPath + "/" + numberOfBaseClassifiers + ".csv");
-            StringBuilder res = initializeResultStringBuilder(numbersOfSpaceParts);
-            for (int numberOfSelectedClassifiers = 2; numberOfSelectedClassifiers <= numberOfBaseClassifiers; numberOfSelectedClassifiers++) {
-                opts.setNumberOfSelectedClassifiers(numberOfSelectedClassifiers);
-                File[] files = new File(sourcePath).listFiles();
-                for (int numberOfFile = 0; numberOfFile < files.length; numberOfFile++) {
-                    opts.setFilePath(files[numberOfFile].getPath());
-                    if (numberOfFile == 0) res.append(numberOfSelectedClassifiers);
-                    res.append("," + files[numberOfFile].getName().split("_")[0]);
-                    for (int numberOfSpaceParts : numbersOfSpaceParts) {
-                        opts.setNumberOfSpaceParts(numberOfSpaceParts);
-                        Dataset dataset = fileHelper.readFile(opts);
-                        List<Model> clfs = trainer.train(dataset, opts);
-                        modelWriter.saveModels(clfs, opts);
-                        List<int[]> combinations = getCombinationsOfTwo(numberOfBaseClassifiers + 2);
-                        double score = 0;
-                        for (int[] combination : combinations) {
-                            opts.setPermutation(combination);
-                            List<Model> restoredClfs = modelReader.read(opts);
-                            ValidatingTestingTuple validatingTestingTuple = dataset.getValidatingTestingTuple(opts);
-                            ScoreTuple scoreTuple = validator.validate(restoredClfs, validatingTestingTuple, opts);
-                            SelectedTuple selectedTuple = selector.select(scoreTuple, opts);
-                            IntegratedModel integratedModel = integrator.integrate(selectedTuple, restoredClfs, opts);
-                            score += integratedScoreTester.test(integratedModel, validatingTestingTuple, opts);
+            try (PrintWriter printWriter = new PrintWriter(resultPath + "/" + numberOfBaseClassifiers + ".csv")) {
+                StringBuilder res = initializeResultStringBuilder(numbersOfSpaceParts);
+                for (int numberOfSelectedClassifiers = 2; numberOfSelectedClassifiers <= numberOfBaseClassifiers; numberOfSelectedClassifiers++) {
+                    opts.setNumberOfSelectedClassifiers(numberOfSelectedClassifiers);
+                    File[] files = new File(sourcePath).listFiles();
+                    for (int numberOfFile = 0; numberOfFile < files.length; numberOfFile++) {
+                        opts.setFilePath(files[numberOfFile].getPath());
+                        if (numberOfFile == 0) res.append(numberOfSelectedClassifiers);
+                        res.append("," + files[numberOfFile].getName().split("_")[0]);
+                        for (int numberOfSpaceParts : numbersOfSpaceParts) {
+                            opts.setNumberOfSpaceParts(numberOfSpaceParts);
+                            Dataset dataset = fileHelper.readFile(opts);
+                            List<Model> clfs = trainer.train(dataset, opts);
+                            modelWriter.saveModels(clfs, opts);
+                            List<int[]> combinations = getCombinationsOfTwo(numberOfBaseClassifiers + 2);
+                            double score = 0;
+                            for (int[] combination : combinations) {
+                                opts.setPermutation(combination);
+                                List<Model> restoredClfs = modelReader.read(opts);
+                                ValidatingTestingTuple validatingTestingTuple = dataset.getValidatingTestingTuple(opts);
+                                ScoreTuple scoreTuple = validator.validate(restoredClfs, validatingTestingTuple, opts);
+                                SelectedTuple selectedTuple = selector.select(scoreTuple, opts);
+                                IntegratedModel integratedModel = integrator.integrate(selectedTuple, restoredClfs, opts);
+                                score += integratedScoreTester.test(integratedModel, validatingTestingTuple, opts);
+                            }
+                            score /= combinations.size();
+                            res.append(",").append(score);
                         }
-                        score /= combinations.size();
-                        res.append(",").append(score);
+                        res.append("\n");
                     }
-                    res.append("\n");
                 }
-            }
             printWriter.println(res.toString());
             printWriter.flush();
-            printWriter.close();
+            }
         }
 
-        /*for (File file : (new File(sourcePath)).listFiles()) {
-            opts.setFilePath(file.getPath());
-            for (int numberOfSpaceParts : numbersOfSpaceParts) {
-                opts.setNumberOfSpaceParts(numberOfSpaceParts);
-                for (int numberOfBaseClassifiers : numbersOfBaseClassifiers) {
-                    opts.setNumberOfBaseClassifiers(numberOfBaseClassifiers);
-                    for (int numberOfSelectedClassifiers = 2; numberOfSelectedClassifiers <= numberOfBaseClassifiers; numberOfSelectedClassifiers++) {
-                        opts.setNumberOfSelectedClassifiers(numberOfSelectedClassifiers);
-                        System.out.println("File: " + file.getName());
-                        opts.setFilePath(file.getPath());
-                        Dataset dataset = fileHelper.readFile(opts);
-                        List<Model> clfs = trainer.train(dataset, opts);
-                        ScoreTuple scoreTuple = validator.validate(clfs, dataset, opts);
-                        SelectedTuple selectedTuple = selector.select(scoreTuple, opts);
-                        IntegratedModel integratedModel = integrator.integrate(selectedTuple, clfs, opts);
-                        IntegratedScoreTester integratedScoreTester = new IntegratedScoreTester();
-                        MVScoreTester mvScoreTester = new MVScoreTester();
-                        System.out.println(integratedScoreTester.test(integratedModel, dataset));
-                        System.out.println(mvScoreTester.test(clfs, dataset));
-                    }
-                }
-            }
-        }*/
-
         Date after = new Date();
-
         System.out.println("Took " + ((after.getTime() - before.getTime()) / 1000));
 
     }
