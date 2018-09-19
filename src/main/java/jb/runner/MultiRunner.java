@@ -28,6 +28,9 @@ import java.util.List;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
+import static jb.config.Constants.convertedSourcesPath;
+import static jb.config.Constants.resultPath;
+import static jb.config.Constants.separator;
 import static jb.util.MathUtils.getCombinationsOfTwo;
 import static jb.util.ModelUtils.calculateMccFromConfMat;
 import static jb.util.ModelUtils.calculateScoreFromConfMat;
@@ -49,11 +52,9 @@ public class MultiRunner {
 
     public static void main(String[] args) throws IOException, InvalidInputDataException {
 
-        String sourcePath = "src/main/resources/target";
-        String resultPath = "src/main/resources/results";
         Opts opts = Opts.builder().bias(1).solverType(SolverType.L2R_LR).C(1).eps(.01).build();
-        int[] numbersOfBaseClassifiers = {3, 5};//, 7, 9};
-        int[] numbersOfSpaceParts = {3, 4};//, 5, 6, 7, 8, 9, 10};
+        int[] numbersOfBaseClassifiers = {3, 5, 7, 9};
+        int[] numbersOfSpaceParts = {3, 4, 5, 6, 7, 8, 9, 10};
         Date before = new Date();
 
         for (int numberOfBaseClassifiers : numbersOfBaseClassifiers) {
@@ -62,11 +63,11 @@ public class MultiRunner {
                 StringBuilder res = initializeResultStringBuilder(numbersOfSpaceParts);
                 for (int numberOfSelectedClassifiers = 2; numberOfSelectedClassifiers <= numberOfBaseClassifiers; numberOfSelectedClassifiers++) {
                     opts.setNumberOfSelectedClassifiers(numberOfSelectedClassifiers);
-                    File[] files = new File(sourcePath).listFiles();
+                    File[] files = new File(convertedSourcesPath).listFiles();
                     for (int numberOfFile = 0; numberOfFile < files.length; numberOfFile++) {
                         opts.setFilePath(files[numberOfFile].getPath());
                         if (numberOfFile == 0) res.append(numberOfSelectedClassifiers);
-                        res.append("," + files[numberOfFile].getName().split("_")[0]);
+                        res.append(separator + files[numberOfFile].getName().split("_")[0]);
                         for (int numberOfSpaceParts : numbersOfSpaceParts) {
                             opts.setNumberOfSpaceParts(numberOfSpaceParts);
                             Dataset dataset = fileHelper.readFile(opts);
@@ -88,7 +89,7 @@ public class MultiRunner {
                                 statistics[2] += calculateScoreFromConfMat(mvConfMat);
                                 statistics[3] += calculateMccFromConfMat(mvConfMat);
                             }
-                            DoubleStream.of(statistics).map(i -> i / combinations.size()).mapToObj(i -> "," + i).forEach(res::append);
+                            DoubleStream.of(statistics).map(i -> i / combinations.size()).mapToObj(i -> separator + i).forEach(res::append);
                         }
                         res.append("\n");
                     }
@@ -104,10 +105,10 @@ public class MultiRunner {
     }
 
     private static StringBuilder initializeResultStringBuilder(int[] numbersOfSpaceParts) {
-        StringBuilder res = new StringBuilder(",subspaces");
-        IntStream.of(numbersOfSpaceParts).mapToObj(i -> "," + i + new String(new char[numberOfStatistics - 1]).replace("\0", ",")).forEach(res::append);
-        res.append("\nselected classifiers,filename");
-        IntStream.of(numbersOfSpaceParts).mapToObj(i -> ",i score,i mcc,mv score,mv mcc").forEach(res::append);
+        StringBuilder res = new StringBuilder(separator + "subspaces");
+        IntStream.of(numbersOfSpaceParts).mapToObj(i -> separator + i + new String(new char[numberOfStatistics - 1]).replace("\0", separator)).forEach(res::append);
+        res.append("\nselected classifiers" + separator + "filename");
+        IntStream.of(numbersOfSpaceParts).mapToObj(i -> separator + "i score" + separator + "i mcc" + separator + "mv score" + separator + "mv mcc").forEach(res::append);
         res.append("\n");
         return res;
     }
