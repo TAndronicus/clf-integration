@@ -67,7 +67,8 @@ public class Normalizing2FeatureArff2LibSvmConverter {
                     if (i != columns[0] && i != columns[1]) {
                         continue;
                     }
-                    newline.append(" " + (loopCounter + 1) + ":" + ((Double.valueOf(values[loopCounter].trim()) - average[loopCounter]) / square[loopCounter]));
+                    // newline.append(" " + (loopCounter + 1) + ":" + ((Double.valueOf(values[loopCounter].trim()) - average[loopCounter]) / square[loopCounter]));
+                    newline.append(" " + (loopCounter + 1) + ":" + Double.valueOf(values[loopCounter].trim()));
                     loopCounter++;
                 }
                 printWriter.println(newline.toString());

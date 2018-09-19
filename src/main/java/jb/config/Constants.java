@@ -10,6 +10,6 @@ public class Constants {
 
     public static final String resultPath = "src/main/resources/results";
 
-    public static final String separator = ";";
+    public static final String separator = ",";
 
 }
