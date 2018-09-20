@@ -81,7 +81,7 @@ public class MultiRunner {
                                 ValidatingTestingTuple validatingTestingTuple = dataset.getValidatingTestingTuple(opts);
                                 ScoreTuple scoreTuple = validator.validate(restoredClfs, validatingTestingTuple, opts);
                                 SelectedTuple selectedTuple = selector.select(scoreTuple, opts);
-                                IntegratedModel integratedModel = integrator.integrate(selectedTuple, restoredClfs, opts);
+                                IntegratedModel integratedModel = integrator.integrate(selectedTuple, restoredClfs, dataset, opts);
                                 int[][] integratedConfMat = integratedConfMatTester.test(integratedModel, validatingTestingTuple, opts);
                                 statistics[0] += calculateScoreFromConfMat(integratedConfMat);
                                 statistics[1] += calculateMccFromConfMat(integratedConfMat);

@@ -44,7 +44,7 @@ public class Runner {
         ValidatingTestingTuple validatingTestingTuple = dataset.getValidatingTestingTuple(opts);
         ScoreTuple scoreTuple = validator.validate(clfs, validatingTestingTuple, opts);
         SelectedTuple selectedTuple = selector.select(scoreTuple, opts);
-        IntegratedModel integratedModel = integrator.integrate(selectedTuple, clfs, opts);
+        IntegratedModel integratedModel = integrator.integrate(selectedTuple, clfs, dataset, opts);
         IntegratedScoreTester integratedScoreTester = new IntegratedScoreTester();
         System.out.println(integratedScoreTester.test(integratedModel, validatingTestingTuple, opts));
 

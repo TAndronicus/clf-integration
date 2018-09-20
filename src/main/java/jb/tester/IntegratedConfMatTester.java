@@ -14,8 +14,8 @@ public class IntegratedConfMatTester {
 
     public int[][] test(IntegratedModel integratedModel, ValidatingTestingTuple validatingTestingTuple, Opts opts) {
         int[][] confusionMatrix = {{0, 0}, {0, 0}};
-        int realIndex = 0;
-        int predictedIndex = 0;
+        int realIndex;
+        int predictedIndex;
         for (int i = 0; i < validatingTestingTuple.getTestingProblem().getY().length; i++) {
             int index = getIndexOfSubspace(opts.getNumberOfSpaceParts(), validatingTestingTuple.getTestingProblem().getX()[i][0], validatingTestingTuple.getMinX(), validatingTestingTuple.getMaxX());
             double value = integratedModel.getA()[index] * validatingTestingTuple.getTestingProblem().getX()[i][0] + integratedModel.getB()[index];
