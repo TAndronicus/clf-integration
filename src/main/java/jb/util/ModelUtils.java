@@ -27,7 +27,7 @@ public class ModelUtils {
         for (int i = 0; i < clfs.size(); i++) {
             bs[i] = - clfs.get(i).getFeatureWeights()[2] / clfs.get(i).getFeatureWeights()[1];
         }
-        return new double[clfs.size()];
+        return bs;
     }
 
     public static boolean predictsPropperly(Model model, ClfObject clfObject) {
