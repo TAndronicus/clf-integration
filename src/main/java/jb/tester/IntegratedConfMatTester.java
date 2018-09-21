@@ -6,6 +6,8 @@ import jb.data.ValidatingTestingTuple;
 import jb.util.ModelUtils;
 import lombok.Data;
 
+import java.util.Arrays;
+
 import static jb.util.ModelUtils.getIndexOfSubspace;
 import static jb.util.ModelUtils.switchConfMatColumns;
 
@@ -17,7 +19,7 @@ public class IntegratedConfMatTester {
         int realIndex;
         int predictedIndex;
         for (int i = 0; i < validatingTestingTuple.getTestingProblem().getY().length; i++) {
-            int index = getIndexOfSubspace(opts.getNumberOfSpaceParts(), validatingTestingTuple.getTestingProblem().getX()[i][0], validatingTestingTuple.getMinX(), validatingTestingTuple.getMaxX());
+            int index = getIndexOfSubspace(integratedModel.getX(), validatingTestingTuple.getTestingProblem().getX()[i][0]);
             double value = integratedModel.getA()[index] * validatingTestingTuple.getTestingProblem().getX()[i][0] + integratedModel.getB()[index];
             realIndex = validatingTestingTuple.getTestingProblem().getY()[i] == 1 ? 1 : 0;
             predictedIndex = value > validatingTestingTuple.getTestingProblem().getX()[i][1] ? 1 : 0;
