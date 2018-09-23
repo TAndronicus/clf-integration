@@ -8,6 +8,9 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
+import static jb.config.Constants.convertedSourcesPath;
+import static jb.config.Constants.normalize;
+
 public class Normalizing2FeatureArff2LibSvmConverter {
 
     public static void main(String[] args) {
@@ -23,7 +26,8 @@ public class Normalizing2FeatureArff2LibSvmConverter {
     }
 
     public static void convertFile(File file) throws IOException {
-        String pathToTargets = "src/main/resources/target";
+        File root = new File(convertedSourcesPath);
+        if (!root.exists()) root.mkdir();
         List<String> lines = Files.readAllLines(Paths.get(file.getPath()));
         int valuesCounter = 0;
         double[] average = null;
@@ -51,7 +55,7 @@ public class Normalizing2FeatureArff2LibSvmConverter {
             square[i] = Math.sqrt(square[i] / valuesCounter);
         }
         columns = selectFeatures(square);
-        try (PrintWriter printWriter = new PrintWriter(new File(pathToTargets + "//" + file.getName().split("[.]")[0] + "_" + columns[0] + "_" +
+        try (PrintWriter printWriter = new PrintWriter(new File(convertedSourcesPath + "//" + file.getName().split("[.]")[0] + "_" + columns[0] + "_" +
                 columns[1] + "_converted." + file.getPath().split("[.]")[1]))) {
             int counter = 0;
             for (String line : lines) {
@@ -66,8 +70,11 @@ public class Normalizing2FeatureArff2LibSvmConverter {
                     if (i != columns[0] && i != columns[1]) {
                         continue;
                     }
-                    // newline.append(" " + (loopCounter + 1) + ":" + ((Double.valueOf(values[loopCounter].trim()) - average[loopCounter]) / square[loopCounter]));
-                    newline.append(" " + (loopCounter + 1) + ":" + Double.valueOf(values[loopCounter].trim()));
+                    if (normalize) {
+                        newline.append(" " + (loopCounter + 1) + ":" + ((Double.valueOf(values[loopCounter].trim()) - average[loopCounter]) / square[loopCounter]));
+                    } else {
+                        newline.append(" " + (loopCounter + 1) + ":" + Double.valueOf(values[loopCounter].trim()));
+                    }
                     loopCounter++;
                 }
                 printWriter.println(newline.toString());

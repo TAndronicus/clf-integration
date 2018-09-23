@@ -16,6 +16,8 @@ public class ModelWriter {
 
         for (int i = 0; i < clfs.size(); i++) {
             try {
+                File root = new File(modelsPath);
+                if (!root.exists()) root.mkdir();
                 Linear.saveModel(new File(modelsPath + "/" + opts.getFilename().substring(0, 3) + "_" + i + "_on_" + clfs.size()), clfs.get(i));
             } catch (IOException e) {
                 e.printStackTrace();

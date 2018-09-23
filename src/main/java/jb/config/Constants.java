@@ -12,4 +12,6 @@ public class Constants {
 
     public static final String separator = ",";
 
+    public static final boolean normalize = false;
+
 }

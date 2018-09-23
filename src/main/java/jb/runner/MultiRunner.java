@@ -3,6 +3,7 @@ package jb.runner;
 import de.bwaldvogel.liblinear.InvalidInputDataException;
 import de.bwaldvogel.liblinear.Model;
 import de.bwaldvogel.liblinear.SolverType;
+import jb.config.Constants;
 import jb.config.Opts;
 import jb.data.*;
 import jb.files.FileHelper;
@@ -50,6 +51,8 @@ public class MultiRunner {
         Opts opts = Opts.builder().bias(1).solverType(SolverType.L2R_LR).C(1).eps(.01).build();
         int[] numbersOfBaseClassifiers = {3, 5, 7, 9};
         int[] numbersOfSpaceParts = {3, 4, 5, 6, 7, 8, 9, 10};
+        File root = new File(resultPath);
+        if (!root.exists()) root.mkdir();
         Date before = new Date();
 
         for (int numberOfBaseClassifiers : numbersOfBaseClassifiers) {
