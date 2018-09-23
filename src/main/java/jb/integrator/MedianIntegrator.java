@@ -18,6 +18,27 @@ public class MedianIntegrator implements Integrator {
     @Override
     public IntegratedModel integrate(SelectedTuple selectedTuple, List<Model> clfs, Dataset dataset, Opts opts) {
 
+        IntegratedModel duplicatedModel = getDuplicatedModel(selectedTuple, clfs, dataset, opts);
+        List<Double> resultAs = new ArrayList<>();
+        List<Double> resultBs = new ArrayList<>();
+        List<Double> resultX = new ArrayList<>();
+        resultAs.add(duplicatedModel.getA()[0]);
+        resultBs.add(duplicatedModel.getB()[0]);
+        resultX.add(duplicatedModel.getX()[0]);
+        for (int i = 0; i < duplicatedModel.getX().length - 2; i++) {
+            if (duplicatedModel.getA()[i] == duplicatedModel.getA()[i + 1] && duplicatedModel.getB()[i] == duplicatedModel.getB()[i + 1]) continue;
+            resultAs.add(duplicatedModel.getA()[i + 1]);
+            resultBs.add(duplicatedModel.getB()[i + 1]);
+            resultX.add(duplicatedModel.getX()[i + 1]);
+        }
+        resultX.add(duplicatedModel.getX()[duplicatedModel.getX().length - 1]);
+        return IntegratedModel.builder().
+                a(resultAs.stream().mapToDouble(Double::doubleValue).toArray()).
+                b(resultBs.stream().mapToDouble(Double::doubleValue).toArray()).
+                x(resultX.stream().mapToDouble(Double::doubleValue).toArray()).build();
+    }
+
+    private IntegratedModel getDuplicatedModel(SelectedTuple selectedTuple, List<Model> clfs, Dataset dataset, Opts opts) {
         List<Double> duplicatingAs = new ArrayList<>();
         List<Double> duplicatingBs = new ArrayList<>();
         List<Double> duplicatingX = new ArrayList<>();
@@ -30,12 +51,7 @@ public class MedianIntegrator implements Integrator {
             filteredCrosspoints.sort(Double::compare);
             int[] previousIndices = null;
             for (int j = 0; j < filteredCrosspoints.size() - 1; j++) {
-                List<FunctionValue> functionValues = new ArrayList<>();
-                for (int k = 0; k < as.length; k++) {
-                    functionValues.add(new FunctionValue(k, as[k] * (filteredCrosspoints.get(j) + filteredCrosspoints.get(j + 1)) / 2 + bs[k]));
-                }
-                functionValues.sort(Comparator.comparingDouble(FunctionValue::getValue));
-                int[] indices = getMiddleIndices(functionValues);
+                int[] indices = getMiddleIndices(as, bs, filteredCrosspoints, j);
                 if (sameIndices(previousIndices, indices)) continue;
                 duplicatingAs.add(indices.length == 1 ? as[indices[0]] : (as[indices[0]] + as[indices[1]]) / 2);
                 duplicatingBs.add(indices.length == 1 ? bs[indices[0]] : (bs[indices[0]] + bs[indices[1]]) / 2);
@@ -44,23 +60,19 @@ public class MedianIntegrator implements Integrator {
             }
         }
         duplicatingX.add(dataset.getMaxX());
-        List<Double> resultAs = new ArrayList<>();
-        List<Double> resultBs = new ArrayList<>();
-        List<Double> resultX = new ArrayList<>();
-        resultAs.add(duplicatingAs.get(0));
-        resultBs.add(duplicatingBs.get(0));
-        resultX.add(duplicatingX.get(0));
-        for (int i = 0; i < duplicatingX.size() - 2; i++) {
-            if (duplicatingAs.get(i).equals(duplicatingAs.get(i + 1)) && duplicatingBs.get(i).equals(duplicatingBs.get(i + 1))) continue;
-            resultAs.add(duplicatingAs.get(i + 1));
-            resultBs.add(duplicatingBs.get(i + 1));
-            resultX.add(duplicatingX.get(i + 1));
-        }
-        resultX.add(duplicatingX.get(duplicatingX.size() - 1));
         return IntegratedModel.builder().
-                a(resultAs.stream().mapToDouble(Double::doubleValue).toArray()).
-                b(resultBs.stream().mapToDouble(Double::doubleValue).toArray()).
-                x(resultX.stream().mapToDouble(Double::doubleValue).toArray()).build();
+                a(duplicatingAs.stream().mapToDouble(Double::doubleValue).toArray()).
+                b(duplicatingBs.stream().mapToDouble(Double::doubleValue).toArray()).
+                x(duplicatingX.stream().mapToDouble(Double::doubleValue).toArray()).build();
+    }
+
+    private int[] getMiddleIndices(double[] as, double[] bs, List<Double> filteredCrosspoints, int j) {
+        List<FunctionValue> functionValues = new ArrayList<>();
+        for (int k = 0; k < as.length; k++) {
+            functionValues.add(new FunctionValue(k, as[k] * (filteredCrosspoints.get(j) + filteredCrosspoints.get(j + 1)) / 2 + bs[k]));
+        }
+        functionValues.sort(Comparator.comparingDouble(FunctionValue::getValue));
+        return getMiddleIndices(functionValues);
     }
 
     private boolean sameIndices(int[] previousIndices, int[] indices) {
