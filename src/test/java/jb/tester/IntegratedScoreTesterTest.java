@@ -20,9 +20,10 @@ public class IntegratedScoreTesterTest {
         Opts opts = Opts.builder().permutation(new int[]{0, 0}).numberOfSpaceParts(3).build();
         double[] a = {1, .5, 2};
         double[] b = {.5, 0, -.5};
+        double[] crosspoints = {-1, 0, 1, 2};
         double minX = -1;
         double maxX = 2;
-        IntegratedModel integratedModel = IntegratedModel.builder().a(a).b(b).build();
+        IntegratedModel integratedModel = IntegratedModel.builder().a(a).b(b).x(crosspoints).build();
         double[][] x = {
                 {.2, 0},
                 {.5, .3},
