@@ -29,7 +29,7 @@ public class Runner {
     static Trainer trainer = new SvmTrainer();
     static Validator validator = new SimpleScoreValidator();
     static Selector selector = new NBestSelector();
-    static Integrator integrator = new MedianIntegrator();
+    static Integrator integrator = new MeanIntegrator();
     static ModelWriter modelWriter = new ModelWriter();
     static ModelReader modelReader = new ModelReader();
 

@@ -7,8 +7,6 @@ import lombok.Data;
 @Builder
 public class IntegratedModel {
 
-    private double minX;
-    private double maxX;
     private double[] a;
     private double[] b;
     /**

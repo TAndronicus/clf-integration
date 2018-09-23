@@ -57,7 +57,7 @@ public class MedianIntegrator implements Integrator {
             resultX.add(duplicatingX.get(i + 1));
         }
         resultX.add(duplicatingX.get(duplicatingX.size() - 1));
-        return IntegratedModel.builder().minX(dataset.getMinX()).maxX(dataset.getMaxX()).
+        return IntegratedModel.builder().
                 a(resultAs.stream().mapToDouble(Double::doubleValue).toArray()).
                 b(resultBs.stream().mapToDouble(Double::doubleValue).toArray()).
                 x(resultX.stream().mapToDouble(Double::doubleValue).toArray()).build();

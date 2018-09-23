@@ -21,16 +21,18 @@ public class MeanIntegrator implements Integrator {
         
         double[] a = new double[opts.getNumberOfSpaceParts()];
         double[] b = new double[opts.getNumberOfSpaceParts()];
-        double[] x = new double[opts.getNumberOfSpaceParts() - 1];
+        double[] x = new double[opts.getNumberOfSpaceParts() + 1];
+        x[0] = dataset.getMinX();
+        x[opts.getNumberOfSpaceParts()] = dataset.getMaxX();
         for (int i = 0; i < opts.getNumberOfSpaceParts(); i++) {
             List<Model> selectedClfs = getSelectedClfs(clfs, selectedTuple.getIndices()[i]);
             double[] as = getAs(selectedClfs);
             double[] bs = getBs(selectedClfs);
             a[i] = MathUtils.vectorProduct(as, selectedTuple.getWeights()[i]) / MathUtils.vectorTrace(selectedTuple.getWeights()[i]);
             b[i] = MathUtils.vectorProduct(bs, selectedTuple.getWeights()[i]) / MathUtils.vectorTrace(selectedTuple.getWeights()[i]);
-            if (i != opts.getNumberOfSpaceParts() - 1) x[i] = dataset.getMinX() + (i + 1) * (dataset.getMaxX() - dataset.getMinX()) / opts.getNumberOfSpaceParts();
+            if (i != opts.getNumberOfSpaceParts() - 1) x[i + 1] = dataset.getMinX() + (i + 1) * (dataset.getMaxX() - dataset.getMinX()) / opts.getNumberOfSpaceParts();
         }
-        return IntegratedModel.builder().a(a).b(b).x(x).minX(dataset.getMinX()).maxX(dataset.getMaxX()).build();
+        return IntegratedModel.builder().a(a).b(b).x(x).build();
     }
 
     private List<Model> getSelectedClfs(List<Model> clfs, int[] index) {

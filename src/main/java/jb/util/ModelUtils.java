@@ -47,7 +47,7 @@ public class ModelUtils {
 
     public static int getIndexOfSubspace(double[] x, double sample) {
         int ind = Arrays.binarySearch(x, sample);
-        return ind < 0 ? -1 - ind : ind;
+        return ind < 0 ? -2 - ind : ind - 1;
     }
 
     public static double calculateScoreFromConfMat(int[][] confMat) {
