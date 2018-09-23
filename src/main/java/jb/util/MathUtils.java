@@ -31,4 +31,8 @@ public class MathUtils {
         return combinations;
     }
 
+    public static boolean arePermutations(int[] v0, int[] v1) {
+        return v0.length == 1 ? v0[0] == v1[0] : (v0[0] == v1[0] && v0[1] == v1[1]) || (v0[0] == v1[1] && v0[1] == v1[0]);
+    }
+
 }

@@ -85,34 +85,4 @@ public class ModelUtils {
         return pickedModels;
     }
 
-    public static List<Double> getAllCrosspoints(double[] as, double[] bs) {
-        List<Double> x = new ArrayList<>();
-        for (int i = 0; i < as.length; i++) {
-            for (int j = 0; j < bs.length; j++) {
-                if (i == j || as[i] == as[j]) continue;
-                x.add((bs[i] - bs[j]) / (as[i] - as[j]));
-            }
-        }
-        return x;
-    }
-
-    public static List<Double> filterCrosspoints(List<Double> crosspoints, Dataset dataset, int index, Opts opts) {
-        List<Double> filteredCrosspoints = new ArrayList<>();
-        for (Double crosspoint : crosspoints) {
-            if (crosspoint < getLowerLimit(dataset, index, opts) || crosspoint > getHigherLimit(dataset, index, opts)) continue;
-            filteredCrosspoints.add(crosspoint);
-        }
-        filteredCrosspoints.add(getLowerLimit(dataset, index, opts));
-        filteredCrosspoints.add(getHigherLimit(dataset, index, opts));
-        return filteredCrosspoints;
-    }
-
-    private static double getLowerLimit(Dataset dataset, int index, Opts opts) {
-        return dataset.getMinX() + index * (dataset.getMaxX() - dataset.getMinX()) / opts.getNumberOfSpaceParts();
-    }
-
-    private static double getHigherLimit(Dataset dataset, int index, Opts opts) {
-        return dataset.getMinX() + (index + 1 ) * (dataset.getMaxX() - dataset.getMinX()) / opts.getNumberOfSpaceParts();
-    }
-
 }
