@@ -6,8 +6,6 @@ import jb.data.ValidatingTestingTuple;
 import jb.util.ModelUtils;
 import lombok.Data;
 
-import java.util.Arrays;
-
 import static jb.util.ModelUtils.getIndexOfSubspace;
 import static jb.util.ModelUtils.switchConfMatColumns;
 

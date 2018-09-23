@@ -10,7 +10,7 @@ import jb.files.SimpleFileReader;
 import jb.files.serialization.ModelReader;
 import jb.files.serialization.ModelWriter;
 import jb.integrator.Integrator;
-import jb.integrator.MeanIntegrator;
+import jb.integrator.MedianIntegrator;
 import jb.selector.NBestSelector;
 import jb.selector.Selector;
 import jb.tester.IntegratedConfMatTester;
@@ -28,27 +28,22 @@ import java.util.List;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
-import static jb.config.Constants.convertedSourcesPath;
-import static jb.config.Constants.resultPath;
-import static jb.config.Constants.separator;
+import static jb.config.Constants.*;
 import static jb.util.MathUtils.getCombinationsOfTwo;
-import static jb.util.ModelUtils.calculateMccFromConfMat;
-import static jb.util.ModelUtils.calculateScoreFromConfMat;
-import static jb.util.ModelUtils.pickModels;
+import static jb.util.ModelUtils.*;
 
 public class MultiRunner {
 
+    private static final int numberOfStatistics = 4;
     private static FileHelper fileHelper = new SimpleFileReader();
     private static Trainer trainer = new SvmTrainer();
     private static ModelReader modelReader = new ModelReader();
     private static ModelWriter modelWriter = new ModelWriter();
     private static Validator validator = new SimpleScoreValidator();
     private static Selector selector = new NBestSelector();
-    private static Integrator integrator = new MeanIntegrator();
+    private static Integrator integrator = new MedianIntegrator();
     private static IntegratedConfMatTester integratedConfMatTester = new IntegratedConfMatTester();
     private static MvConfMatTester mvConfMatTester = new MvConfMatTester();
-
-    private static final int numberOfStatistics = 4;
 
     public static void main(String[] args) throws IOException, InvalidInputDataException {
 
@@ -94,8 +89,8 @@ public class MultiRunner {
                         res.append("\n");
                     }
                 }
-            printWriter.println(res.toString());
-            printWriter.flush();
+                printWriter.println(res.toString());
+                printWriter.flush();
             }
         }
 

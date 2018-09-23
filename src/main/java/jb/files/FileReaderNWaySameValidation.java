@@ -1,6 +1,5 @@
 package jb.files;
 
-import de.bwaldvogel.liblinear.Feature;
 import de.bwaldvogel.liblinear.InvalidInputDataException;
 import de.bwaldvogel.liblinear.Problem;
 import jb.config.Opts;
@@ -10,7 +9,9 @@ import jb.data.clfobj.ClfObjectDoubleSorted;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class FileReaderNWaySameValidation implements FileHelper {
 

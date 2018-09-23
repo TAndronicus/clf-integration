@@ -3,12 +3,13 @@ package jb.files.serialization;
 import de.bwaldvogel.liblinear.Linear;
 import de.bwaldvogel.liblinear.Model;
 import jb.config.Opts;
-import static jb.config.Constants.modelsPath;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static jb.config.Constants.modelsPath;
 
 public class ModelReader {
 
@@ -23,7 +24,6 @@ public class ModelReader {
                     e.printStackTrace();
                 }
             }
-            System.out.println(file.getName());
         }
         return clfs;
     }

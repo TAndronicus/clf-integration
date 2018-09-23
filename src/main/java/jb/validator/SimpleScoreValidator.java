@@ -26,7 +26,7 @@ public class SimpleScoreValidator implements Validator {
                 double propperlyClassified = 0;
                 Problem currentProblem = validatingTestingTuple.getValidationProblems().get(j);
                 for (int k = 0; k < currentProblem.getX().length; k++) {
-                    if(predictsPropperly(clfs.get(i), new ClfObjectOnceSorted(currentProblem.getX()[k], currentProblem.getY()[k]))) {
+                    if (predictsPropperly(clfs.get(i), new ClfObjectOnceSorted(currentProblem.getX()[k], currentProblem.getY()[k]))) {
                         propperlyClassified++;
                     }
                 }

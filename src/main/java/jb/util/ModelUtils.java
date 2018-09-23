@@ -5,7 +5,6 @@ import de.bwaldvogel.liblinear.FeatureNode;
 import de.bwaldvogel.liblinear.Linear;
 import de.bwaldvogel.liblinear.Model;
 import jb.config.Opts;
-import jb.data.Dataset;
 import jb.data.clfobj.ClfObject;
 
 import java.util.ArrayList;
@@ -47,7 +46,9 @@ public class ModelUtils {
 
     public static int getIndexOfSubspace(double[] x, double sample) {
         int ind = Arrays.binarySearch(x, sample);
-        return ind < 0 ? -2 - ind : ind - 1;
+        ind = ind < 0 ? -2 - ind : ind - 1;
+        ind = ind == -1 ? 0 : ind;
+        return ind;
     }
 
     public static double calculateScoreFromConfMat(int[][] confMat) {

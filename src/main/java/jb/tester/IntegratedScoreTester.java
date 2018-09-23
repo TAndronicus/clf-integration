@@ -1,7 +1,6 @@
 package jb.tester;
 
 import jb.config.Opts;
-import jb.data.Dataset;
 import jb.data.IntegratedModel;
 import jb.data.Problem;
 import jb.data.ValidatingTestingTuple;
@@ -14,7 +13,7 @@ public class IntegratedScoreTester {
         double counter = 0;
         Problem problem = validatingTestingTuple.getTestingProblem();
         for (int i = 0; i < problem.getY().length; i++) {
-            int index = getIndexOfSubspace(opts.getNumberOfSpaceParts(), problem.getX()[i][0], validatingTestingTuple.getMinX(), validatingTestingTuple.getMaxX());
+            int index = getIndexOfSubspace(integratedModel.getX(), problem.getX()[i][0]);
             double value = integratedModel.getA()[index] * problem.getX()[i][0] + integratedModel.getB()[index];
             if (value > problem.getX()[i][1] ^ problem.getY()[i] == 1) {
                 counter++;

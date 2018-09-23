@@ -32,7 +32,9 @@ public class IntegratedScoreTesterTest {
         };
         int[] y = {0, 0, 1, 1, 0}; // should be {0, 1, 0, 1, 0}, expected score 1 - 0.4 = 0.6
         Problem problem = new Problem(x, y);
-        Dataset dataset = new Dataset(new ArrayList<Problem>(){{add(problem);}}, minX, maxX);
+        Dataset dataset = new Dataset(new ArrayList<Problem>() {{
+            add(problem);
+        }}, minX, maxX);
 
         // when
         IntegratedScoreTester integratedScoreTester = new IntegratedScoreTester();

@@ -3,7 +3,6 @@ package jb.config;
 import de.bwaldvogel.liblinear.SolverType;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @Builder

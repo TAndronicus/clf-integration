@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SimpleFileReader implements FileHelper{
+public class SimpleFileReader implements FileHelper {
 
     @Override
     public Dataset readFile(Opts opts) throws IOException, InvalidInputDataException {

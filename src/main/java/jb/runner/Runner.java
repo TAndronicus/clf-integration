@@ -11,10 +11,9 @@ import jb.files.serialization.ModelReader;
 import jb.files.serialization.ModelWriter;
 import jb.integrator.Integrator;
 import jb.integrator.MeanIntegrator;
-import jb.integrator.MedianIntegrator;
 import jb.selector.NBestSelector;
 import jb.selector.Selector;
-import jb.tester.IntegratedScoreTester;
+import jb.tester.IntegratedConfMatTester;
 import jb.trainer.SvmTrainer;
 import jb.trainer.Trainer;
 import jb.validator.SimpleScoreValidator;
@@ -40,14 +39,12 @@ public class Runner {
         Dataset dataset = fileHelper.readFile(opts);
         List<Model> clfs = trainer.train(dataset, opts);
         modelWriter.saveModels(clfs, opts);
-        List<Model> restoredClfs = modelReader.read(opts);
-        System.out.println(restoredClfs.size());
         ValidatingTestingTuple validatingTestingTuple = dataset.getValidatingTestingTuple(opts);
         ScoreTuple scoreTuple = validator.validate(clfs, validatingTestingTuple, opts);
         SelectedTuple selectedTuple = selector.select(scoreTuple, opts);
         IntegratedModel integratedModel = integrator.integrate(selectedTuple, clfs, dataset, opts);
-        IntegratedScoreTester integratedScoreTester = new IntegratedScoreTester();
-        System.out.println(integratedScoreTester.test(integratedModel, validatingTestingTuple, opts));
+        IntegratedConfMatTester tester = new IntegratedConfMatTester();
+        System.out.println(tester.test(integratedModel, validatingTestingTuple, opts));
 
     }
 

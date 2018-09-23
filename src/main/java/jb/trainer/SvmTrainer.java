@@ -9,7 +9,7 @@ import jb.data.Dataset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SvmTrainer implements Trainer{
+public class SvmTrainer implements Trainer {
 
     @Override
     public List<Model> train(Dataset dataset, Opts opts) {

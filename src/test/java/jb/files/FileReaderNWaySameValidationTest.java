@@ -1,15 +1,6 @@
 package jb.files;
 
-import de.bwaldvogel.liblinear.InvalidInputDataException;
 import jb.config.Opts;
-import jb.data.Dataset;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
 
 public class FileReaderNWaySameValidationTest {
 
