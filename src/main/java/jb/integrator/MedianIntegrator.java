@@ -8,7 +8,6 @@ import jb.data.IntegratedModel;
 import jb.data.SelectedTuple;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -19,12 +18,13 @@ public class MedianIntegrator implements Integrator {
     @Override
     public IntegratedModel integrate(SelectedTuple selectedTuple, List<Model> clfs, Dataset dataset, Opts opts) {
 
-        double[] as = getAs(clfs);
-        double[] bs = getBs(clfs);
         List<Double> duplicatingAs = new ArrayList<>();
         List<Double> duplicatingBs = new ArrayList<>();
         List<Double> duplicatingX = new ArrayList<>();
         for (int i = 0; i < opts.getNumberOfSpaceParts(); i++) {
+            List<Model> selectedClfs = pickModels(clfs, selectedTuple.getIndices()[i]);
+            double[] as = getAs(selectedClfs);
+            double[] bs = getBs(selectedClfs);
             List<Double> crosspoints = getAllCrosspoints(as, bs);
             List<Double> filteredCrosspoints = filterCrosspoints(crosspoints, dataset, i, opts);
             filteredCrosspoints.sort(Double::compare);
@@ -89,7 +89,8 @@ public class MedianIntegrator implements Integrator {
         filteredCrosspoints.add(getLowerLimit(dataset, index, opts));
         filteredCrosspoints.add(getHigherLimit(dataset, index, opts));
         for (Double crosspoint : crosspoints) {
-            if (crosspoint < getLowerLimit(dataset, index, opts) || crosspoint > getHigherLimit(dataset, index, opts) || filteredCrosspoints.contains(crosspoint)) continue;
+            if (crosspoint < getLowerLimit(dataset, index, opts) || crosspoint > getHigherLimit(dataset, index, opts) || filteredCrosspoints.contains(crosspoint))
+                continue;
             filteredCrosspoints.add(crosspoint);
         }
         return filteredCrosspoints;
@@ -100,7 +101,7 @@ public class MedianIntegrator implements Integrator {
     }
 
     private double getHigherLimit(Dataset dataset, int index, Opts opts) {
-        return dataset.getMinX() + (index + 1 ) * (dataset.getMaxX() - dataset.getMinX()) / opts.getNumberOfSpaceParts();
+        return dataset.getMinX() + (index + 1) * (dataset.getMaxX() - dataset.getMinX()) / opts.getNumberOfSpaceParts();
     }
 
 }

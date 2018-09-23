@@ -85,4 +85,12 @@ public class ModelUtils {
         return pickedModels;
     }
 
+    public static List<Model> pickModels(List<Model> clfs, int[] indices) {
+        List<Model> selectedClfs = new ArrayList<>();
+        for (int index : indices) {
+            selectedClfs.add(clfs.get(index));
+        }
+        return selectedClfs;
+    }
+
 }
