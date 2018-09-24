@@ -17,6 +17,7 @@ public class Normalizing2FeatureArff2LibSvmConverter {
         String pathToSources = "src/main/resources/source";
         File rootCatalog = new File(pathToSources);
         for (File file : rootCatalog.listFiles()) {
+            if (file.isDirectory()) continue;
             try {
                 convertFile(file);
             } catch (IOException e) {

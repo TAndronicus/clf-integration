@@ -1,5 +1,8 @@
 package jb.data.clfobj;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class ClfObjectDoubleSorted extends ClfObject {
 
     public ClfObjectDoubleSorted(double[] x, int y) {
