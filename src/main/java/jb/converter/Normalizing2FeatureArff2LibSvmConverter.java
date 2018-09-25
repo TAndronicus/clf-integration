@@ -72,9 +72,9 @@ public class Normalizing2FeatureArff2LibSvmConverter {
                         continue;
                     }
                     if (normalize) {
-                        newline.append(" " + (loopCounter + 1) + ":" + ((Double.valueOf(values[loopCounter].trim()) - average[loopCounter]) / square[loopCounter]));
+                        newline.append(" " + (loopCounter + 1) + ":" + ((Double.valueOf(values[i].trim()) - average[i]) / square[i]));
                     } else {
-                        newline.append(" " + (loopCounter + 1) + ":" + Double.valueOf(values[loopCounter].trim()));
+                        newline.append(" " + (loopCounter + 1) + ":" + Double.valueOf(values[i].trim()));
                     }
                     loopCounter++;
                 }
