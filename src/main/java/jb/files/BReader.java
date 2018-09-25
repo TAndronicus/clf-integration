@@ -64,10 +64,13 @@ public class BReader implements FileHelper {
         BClfObject[] result = new BClfObject[problem.l];
         for (int i = 0; i < problem.l; i++) {
             double[] x = new double[problem.n - 2];
+            int counter = 0;
             for (int j = 0; j < problem.n; j++) {
-                x[j] = problem.x[i][j].getValue();
+                if (j == problem.n - 3 || j == problem.n - 2) continue;
+                x[counter] = problem.x[i][j].getValue();
+                counter++;
             }
-            result[i] = new BClfObject(x, (int) problem.y[i], (int) problem.x[i][problem.n - 2].getValue(), (int) problem.x[i][problem.n - 1].getValue());
+            result[i] = new BClfObject(x, (int) problem.y[i], (int) problem.x[i][problem.n - 3].getValue(), (int) problem.x[i][problem.n - 2].getValue());
         }
         return result;
     }
@@ -81,6 +84,7 @@ public class BReader implements FileHelper {
         private double xMax;
 
         public BReader.ExtremeValues invoke() {
+            Arrays.sort(clfObjectsDoubleSorted);
             int classChangeIndex = 0;
             while (clfObjectsDoubleSorted[classChangeIndex].getY() == 0) {
                 classChangeIndex++;

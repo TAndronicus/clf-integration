@@ -11,6 +11,7 @@ import jb.files.SimpleFileReader;
 import jb.files.serialization.ModelReader;
 import jb.files.serialization.ModelWriter;
 import jb.integrator.Integrator;
+import jb.integrator.MeanIntegrator;
 import jb.integrator.MedianIntegrator;
 import jb.selector.NBestSelector;
 import jb.selector.Selector;
@@ -42,7 +43,7 @@ public class MultiRunner {
     private static ModelWriter modelWriter = new ModelWriter();
     private static Validator validator = new SimpleScoreValidator();
     private static Selector selector = new NBestSelector();
-    private static Integrator integrator = new MedianIntegrator();
+    private static Integrator integrator = new MeanIntegrator();
     private static IntegratedConfMatTester integratedConfMatTester = new IntegratedConfMatTester();
     private static MvConfMatTester mvConfMatTester = new MvConfMatTester();
 

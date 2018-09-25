@@ -5,6 +5,7 @@ import de.bwaldvogel.liblinear.Model;
 import de.bwaldvogel.liblinear.SolverType;
 import jb.config.Opts;
 import jb.data.*;
+import jb.files.BReader;
 import jb.files.FileHelper;
 import jb.files.SimpleFileReader;
 import jb.files.serialization.ModelReader;
@@ -14,6 +15,7 @@ import jb.integrator.MeanIntegrator;
 import jb.selector.NBestSelector;
 import jb.selector.Selector;
 import jb.tester.IntegratedConfMatTester;
+import jb.tester.IntegratedScoreTester;
 import jb.trainer.SvmTrainer;
 import jb.trainer.Trainer;
 import jb.validator.SimpleScoreValidator;
@@ -24,7 +26,7 @@ import java.util.List;
 
 public class Runner {
 
-    static FileHelper fileHelper = new SimpleFileReader();
+    static FileHelper fileHelper = new BReader();
     static Trainer trainer = new SvmTrainer();
     static Validator validator = new SimpleScoreValidator();
     static Selector selector = new NBestSelector();
@@ -34,8 +36,8 @@ public class Runner {
 
     public static void main(String[] args) throws IOException, InvalidInputDataException {
 
-        Opts opts = Opts.builder().filePath("src/main/resources/target/data_banknote_authentication_1_2_converted.csv").bias(1).numberOfBaseClassifiers(3).numberOfSelectedClassifiers(2).
-                numberOfSpaceParts(3).solverType(SolverType.L2R_LR).C(1).eps(.01).permutation(new int[]{3, 4}).build();
+        Opts opts = Opts.builder().filePath("src/main/resources/target/1_0_1_converted.csv,src/main/resources/target/2_2_1_converted.csv").bias(1).numberOfBaseClassifiers(10).numberOfSelectedClassifiers(10).
+                numberOfSpaceParts(3).solverType(SolverType.L2R_LR).C(1).eps(.01).permutation(new int[]{10, 11}).build();
         Dataset dataset = fileHelper.readFile(opts);
         List<Model> clfs = trainer.train(dataset, opts);
         modelWriter.saveModels(clfs, opts);
@@ -43,8 +45,8 @@ public class Runner {
         ScoreTuple scoreTuple = validator.validate(clfs, validatingTestingTuple, opts);
         SelectedTuple selectedTuple = selector.select(scoreTuple, opts);
         IntegratedModel integratedModel = integrator.integrate(selectedTuple, clfs, dataset, opts);
-        IntegratedConfMatTester tester = new IntegratedConfMatTester();
-        System.out.println(tester.test(integratedModel, validatingTestingTuple, opts));
+        IntegratedScoreTester integratedScoreTester = new IntegratedScoreTester();
+        System.out.println(integratedScoreTester.test(integratedModel, validatingTestingTuple, opts));
 
     }
 
