@@ -20,22 +20,17 @@ import java.util.stream.Stream;
 public class BReader implements FileHelper {
     @Override
     public Dataset readFile(Opts opts) throws IOException, InvalidInputDataException {
-        String[] paths = opts.getFilePath().split(",");
-        Problem rootProblem0 = Problem.readFromFile(new File(paths[0]), opts.getBias());
+        String path = opts.getFilePath();
+        Problem rootProblem0 = Problem.readFromFile(new File(path), opts.getBias());
         BClfObject[] objects0 = getClfObjects(rootProblem0);
-        Problem rootProblem1 = Problem.readFromFile(new File(paths[1]), opts.getBias());
-        BClfObject[] objects1 = getClfObjects(rootProblem1);
 
-        BReader.ExtremeValues extremeValues = (new BReader.ExtremeValues(Stream.concat(Arrays.stream(objects0), Arrays.stream(objects1)).toArray(BClfObject[]::new))).invoke();
+        BReader.ExtremeValues extremeValues = (new BReader.ExtremeValues(objects0)).invoke();
         double xMin = extremeValues.getXMin();
         double xMax = extremeValues.getXMax();
 
         List<List<ClfObject>> clfObjectsTables = prepareLists();
         for (BClfObject bClfObject : objects0) {
-            clfObjectsTables.get(bClfObject.wt == 0 ? bClfObject.zb - 1 : 11).add(new ClfObjectDoubleSorted(bClfObject.getX(), bClfObject.getY()));
-        }
-        for (BClfObject bClfObject : objects0) {
-            clfObjectsTables.get(bClfObject.wt == 0 ? 10 : 11).add(new ClfObjectDoubleSorted(bClfObject.getX(), bClfObject.getY()));
+            clfObjectsTables.get(bClfObject.wt == 0 ? bClfObject.zb - 1 : 10).add(new ClfObjectDoubleSorted(bClfObject.getX(), bClfObject.getY()));
         }
         List<jb.data.Problem> problems = new ArrayList<>();
         for (List<ClfObject> objectList : clfObjectsTables) {
@@ -54,7 +49,7 @@ public class BReader implements FileHelper {
 
     private List<List<ClfObject>> prepareLists() {
         List<List<ClfObject>> lists = new ArrayList<>();
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 11; i++) {
             lists.add(new ArrayList<>());
         }
         return lists;
