@@ -11,6 +11,7 @@ import java.util.List;
 
 import static jb.config.Constants.convertedSourcesPath;
 import static jb.config.Constants.normalize;
+import static jb.util.BUtils.getAllPermutations;
 
 public class BParser {
 
@@ -26,16 +27,6 @@ public class BParser {
                 e.printStackTrace();
             }
         }
-    }
-
-    private static List<int[]> getAllPermutations() {
-        List<int[]> permutations = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
-            for (int j = i + 1; j < 8; j++) {
-                permutations.add(new int[]{i, j});
-            }
-        }
-        return permutations;
     }
 
     public static void convertFile(File file, int[] columns) throws IOException {
