@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,23 +17,34 @@ public class BParser {
     public static void main(String[] args) {
         String pathToSources = "src/main/resources/source";
         File rootCatalog = new File(pathToSources);
+        List<int[]> permutations = getAllPermutations();
         for (File file : rootCatalog.listFiles()) {
             if (file.isDirectory()) continue;
             try {
-                convertFile(file);
+                for (int[] permutation : permutations) convertFile(file, permutation);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public static void convertFile(File file) throws IOException {
+    private static List<int[]> getAllPermutations() {
+        List<int[]> permutations = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+            for (int j = i + 1; j < 8; j++) {
+                permutations.add(new int[]{i, j});
+            }
+        }
+        return permutations;
+    }
+
+    public static void convertFile(File file, int[] columns) throws IOException {
         createDirIfNone();
         List<String> lines = Files.readAllLines(Paths.get(file.getPath()));
         DatasetInfo datasetInfo = new DatasetInfo(lines).invoke();
         double[] average = datasetInfo.getAverage();
         double[] square = datasetInfo.getSquare();
-        int[] columns = selectFeatures(square);
+        //int[] columns = selectFeatures(square);
         try (PrintWriter printWriter = new PrintWriter(new File(generatePath(file, columns)))) {
             int counter = 0;
             for (String line : lines) {
