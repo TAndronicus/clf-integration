@@ -50,7 +50,7 @@ public class BRunner {
 
     public static void main(String[] args) throws IOException, InvalidInputDataException {
 
-        Opts opts = Opts.builder().bias(1).solverType(SolverType.L2R_LR).C(1).eps(.01).build();
+        /*Opts opts = Opts.builder().bias(1).solverType(SolverType.L2R_LR).C(1).eps(.01).build();
         int[] numbersOfBaseClassifiers = {3, 5, 7, 9};
         int[] numbersOfSpaceParts = {3, 4, 5, 6, 7, 8, 9, 10};
         File root = new File(resultPath);
@@ -101,7 +101,7 @@ public class BRunner {
 
         Date after = new Date();
         System.out.println("Took " + ((after.getTime() - before.getTime()) / 1000));
-
+*/
     }
 
     private static StringBuilder initializeResultStringBuilder(int[] numbersOfSpaceParts) {
