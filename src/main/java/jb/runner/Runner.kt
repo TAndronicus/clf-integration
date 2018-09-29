@@ -42,7 +42,15 @@ object Runner {
             val permutations = getAllPermutations()
             val scores = TreeMap<Double, IntArray>()
             for (permutation in permutations) {
-                val opts = Opts.builder().filePath("src/main/resources/target/7_" + permutation[0] + "_" + permutation[1] + "_converted.csv").bias(1.0).numberOfBaseClassifiers(9).numberOfSelectedClassifiers(3).numberOfSpaceParts(3).solverType(SolverType.L2R_LR).C(1.0).eps(.01).permutation(combination).build()
+                val opts = Opts(filePath = "src/main/resources/target/7_" + permutation[0] + "_" + permutation[1] + "_converted.csv",
+                        bias = 1.0,
+                        numberOfBaseClassifiers = 9,
+                        numberOfSelectedClassifiers = 3,
+                        numberOfSpaceParts = 3,
+                        solverType = SolverType.L2R_LR,
+                        c = 1.0,
+                        eps = .01,
+                        permutation = combination)
                 val dataset = fileHelper.readFile(opts)
                 val clfs = trainer.train(dataset, opts)
                 val validatingTestingTuple = dataset.getValidatingTestingTuple(opts)
