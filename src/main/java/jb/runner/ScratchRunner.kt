@@ -16,7 +16,6 @@ import jb.util.BUtils
 import jb.util.MathUtils
 import jb.validator.SimpleScoreValidator
 import jb.validator.Validator
-import java.io.IOException
 import java.util.*
 
 private var fileHelper: FileHelper = BReader()
@@ -25,7 +24,6 @@ private var validator: Validator = SimpleScoreValidator()
 private var selector: Selector = NBestSelector()
 private var integrator: Integrator = MeanIntegrator()
 
-@Throws(IOException::class, InvalidInputDataException::class)
 fun main(args: Array<String>) {
 
 
