@@ -13,11 +13,10 @@ data class Opts(val filePath: String?, //Absolute path to file in LibSVM format
                 val permutation: IntArray? // [i, j], where i - index of validation dataset, j - index of testing dataset
 ) {
 
-    val filename: String
-        get() {
+    fun getFilename(): String {
             val pathParts = this.filePath!!.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             val nameParts = pathParts[pathParts.size - 1].split("[.]".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             return nameParts[0]
-        }
+    }
 
 }
