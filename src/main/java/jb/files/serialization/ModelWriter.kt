@@ -2,12 +2,11 @@ package jb.files.serialization
 
 import de.bwaldvogel.liblinear.Linear
 import de.bwaldvogel.liblinear.Model
+import jb.config.Constants.Companion.modelsPath
 import jb.config.Opts
 
 import java.io.File
 import java.io.IOException
-
-import jb.config.Constants.modelsPath
 
 class ModelWriter {
 

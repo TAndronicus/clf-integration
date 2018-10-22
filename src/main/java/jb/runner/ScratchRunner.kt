@@ -1,6 +1,5 @@
 package jb.runner
 
-import de.bwaldvogel.liblinear.InvalidInputDataException
 import de.bwaldvogel.liblinear.SolverType
 import jb.config.Opts
 import jb.files.BReader

@@ -20,7 +20,7 @@ class MathUtilsTest {
         double[] v1 = {4, 3, 2, 1};
 
         // when
-        double product = MathUtils.vectorProduct(v0, v1);
+        double product = MathUtils.INSTANCE.vectorProduct(v0, v1);
 
         // then
         assertThat(product, is(equalTo(10.0)));
@@ -33,7 +33,7 @@ class MathUtilsTest {
         double[] vector = {.5, .7, .9, 1.1};
 
         // when
-        double trace = MathUtils.vectorTrace(vector);
+        double trace = MathUtils.INSTANCE.vectorTrace(vector);
 
         // then
         assertThat(trace, is(equalTo(3.2)));
@@ -46,7 +46,7 @@ class MathUtilsTest {
         int range = (int) (100 * Math.random());
 
         // when
-        List<int[]> combinations = MathUtils.getCombinationsOfTwo(range);
+        List<int[]> combinations = MathUtils.INSTANCE.getCombinationsOfTwo(range);
 
         // then
         assertThat(combinations.size(), is(equalTo(range * (range - 1))));
@@ -60,7 +60,7 @@ class MathUtilsTest {
         int[] v1 = {3};
 
         // when
-        boolean arePermutations = MathUtils.arePermutations(v0, v1);
+        boolean arePermutations = MathUtils.INSTANCE.arePermutations(v0, v1);
 
         // then
         assertThat(arePermutations, is(not(true)));
@@ -74,7 +74,7 @@ class MathUtilsTest {
         int[] v1 = {2};
 
         // when
-        boolean arePermutations = MathUtils.arePermutations(v0, v1);
+        boolean arePermutations = MathUtils.INSTANCE.arePermutations(v0, v1);
 
         // then
         assertThat(arePermutations, is(true));
@@ -88,7 +88,7 @@ class MathUtilsTest {
         int[] v1 = {3, 2};
 
         // when
-        boolean arePermutations = MathUtils.arePermutations(v0, v1);
+        boolean arePermutations = MathUtils.INSTANCE.arePermutations(v0, v1);
 
         // then
         assertThat(arePermutations, is(not(true)));
@@ -102,7 +102,7 @@ class MathUtilsTest {
         int[] v1 = {3, 2};
 
         // when
-        boolean arePermutations = MathUtils.arePermutations(v0, v1);
+        boolean arePermutations = MathUtils.INSTANCE.arePermutations(v0, v1);
 
         // then
         assertThat(arePermutations, is(true));

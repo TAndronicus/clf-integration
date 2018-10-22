@@ -11,7 +11,7 @@ import jb.selector.Selector
 import jb.tester.IntegratedScoreTester
 import jb.trainer.SvmTrainer
 import jb.trainer.Trainer
-import jb.util.BUtils.getAllPermutations
+import jb.util.BUtils
 import jb.util.MathUtils.getCombinationsOfTwo
 import jb.validator.SimpleScoreValidator
 import jb.validator.Validator
@@ -28,7 +28,7 @@ fun main(args: Array<String>) {
     val combinations = getCombinationsOfTwo(11)
     val finalScores = TreeSet<Double>()
     for (combination in combinations) {
-        val permutations = getAllPermutations()
+        val permutations = BUtils.getAllPermutations()
         val scores = TreeMap<Double, IntArray>()
         for (permutation in permutations) {
             val opts = Opts(filePath = "src/main/resources/target/7_" + permutation[0] + "_" + permutation[1] + "_converted.csv",

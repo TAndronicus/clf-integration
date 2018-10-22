@@ -22,7 +22,7 @@ public class ModelUtilsTest {
         // when
         int[] indices = new int[expectedIndices.length];
         for (int i = 0; i < indices.length; i++) {
-            indices[i] = ModelUtils.getIndexOfSubspace(numberOfSubspaces, testX[i], minX, maxX);
+            indices[i] = ModelUtils.INSTANCE.getIndexOfSubspace(numberOfSubspaces, testX[i], minX, maxX);
         }
 
         // then
@@ -42,7 +42,7 @@ public class ModelUtilsTest {
         // when
         int[] indices = new int[samples.length];
         for (int i = 0; i < expectedIndices.length; i++) {
-            indices[i] = ModelUtils.getIndexOfSubspace(x, samples[i]);
+            indices[i] = ModelUtils.INSTANCE.getIndexOfSubspace(x, samples[i]);
         }
 
         // then
@@ -59,7 +59,7 @@ public class ModelUtilsTest {
         int[][] confMat = {{(int) (Math.random() * 100), (int) (Math.random() * 100)}, {(int) (Math.random() * 100), (int) (Math.random() * 100)}};
 
         // when
-        double score = ModelUtils.calculateScoreFromConfMat(confMat);
+        double score = ModelUtils.INSTANCE.calculateScoreFromConfMat(confMat);
 
         // then
         assertThat(score, is(equalTo((.0 + confMat[0][0] + confMat[1][1]) / (confMat[0][0] + confMat[0][1] + confMat[1][0] + confMat[1][1]))));

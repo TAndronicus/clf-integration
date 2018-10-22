@@ -9,7 +9,9 @@ import jb.data.SelectedTuple
 
 
 import jb.util.MathUtils.arePermutations
-import jb.util.ModelUtils.*
+import jb.util.ModelUtils.getAs
+import jb.util.ModelUtils.getBs
+import jb.util.ModelUtils.pickModels
 
 class MedianIntegrator : Integrator {
     override fun integrate(selectedTuple: SelectedTuple, clfs: List<Model>, dataset: Dataset, opts: Opts): IntegratedModel {

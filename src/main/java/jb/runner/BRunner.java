@@ -1,6 +1,7 @@
 package jb.runner;
 
 import de.bwaldvogel.liblinear.InvalidInputDataException;
+import jb.config.Constants;
 import jb.files.FileHelper;
 import jb.files.AReader;
 import jb.files.serialization.ModelReader;
@@ -18,9 +19,6 @@ import jb.validator.Validator;
 
 import java.io.IOException;
 import java.util.stream.IntStream;
-
-import static jb.config.Constants.separator;
-import static jb.util.ModelUtils.pickModels;
 
 public class BRunner {
     private static final int numberOfStatistics = 4;
@@ -91,10 +89,10 @@ public class BRunner {
     }
 
     private static StringBuilder initializeResultStringBuilder(int[] numbersOfSpaceParts) {
-        StringBuilder res = new StringBuilder(separator + "subspaces");
-        IntStream.of(numbersOfSpaceParts).mapToObj(i -> separator + i + new String(new char[numberOfStatistics - 1]).replace("\0", separator)).forEach(res::append);
-        res.append("\nselected classifiers" + separator + "filename");
-        IntStream.of(numbersOfSpaceParts).mapToObj(i -> separator + "i score" + separator + "i mcc" + separator + "mv score" + separator + "mv mcc").forEach(res::append);
+        StringBuilder res = new StringBuilder(Constants.separator + "subspaces");
+        IntStream.of(numbersOfSpaceParts).mapToObj(i -> Constants.separator + i + new String(new char[numberOfStatistics - 1]).replace("\0", Constants.separator)).forEach(res::append);
+        res.append("\nselected classifiers" + Constants.separator + "filename");
+        IntStream.of(numbersOfSpaceParts).mapToObj(i -> Constants.separator + "i score" + Constants.separator + "i mcc" + Constants.separator + "mv score" + Constants.separator + "mv mcc").forEach(res::append);
         res.append("\n");
         return res;
     }

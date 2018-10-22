@@ -11,7 +11,7 @@ import jb.util.ModelUtils.switchConfMatColumns
 
 class IntegratedConfMatTester {
 
-    fun test(integratedModel: IntegratedModel, validatingTestingTuple: ValidatingTestingTuple, opts: Opts): Array<IntArray> {
+    fun test(integratedModel: IntegratedModel, validatingTestingTuple: ValidatingTestingTuple): Array<IntArray> {
         val confusionMatrix = arrayOf(intArrayOf(0, 0), intArrayOf(0, 0))
         var realIndex: Int
         var predictedIndex: Int

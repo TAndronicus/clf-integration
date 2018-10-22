@@ -90,12 +90,12 @@ public class MultiRunner {
 */
     }
 
-    private static StringBuilder initializeResultStringBuilder(int[] numbersOfSpaceParts) {
-        StringBuilder res = new StringBuilder(separator + "subspaces");
-        IntStream.of(numbersOfSpaceParts).mapToObj(i -> separator + i + new String(new char[numberOfStatistics - 1]).replace("\0", separator)).forEach(res::append);
-        res.append("\nselected classifiers" + separator + "filename");
-        IntStream.of(numbersOfSpaceParts).mapToObj(i -> separator + "i score" + separator + "i mcc" + separator + "mv score" + separator + "mv mcc").forEach(res::append);
+    /*private static StringBuilder initializeResultStringBuilder(int[] numbersOfSpaceParts) {
+        StringBuilder res = new StringBuilder(INSTANCE.getSeparator() + "subspaces");
+        IntStream.of(numbersOfSpaceParts).mapToObj(i -> INSTANCE.getSeparator() + i + new String(new char[numberOfStatistics - 1]).replace("\0", INSTANCE.getSeparator())).forEach(res::append);
+        res.append("\nselected classifiers" + INSTANCE.getSeparator() + "filename");
+        IntStream.of(numbersOfSpaceParts).mapToObj(i -> INSTANCE.getSeparator() + "i score" + INSTANCE.getSeparator() + "i mcc" + INSTANCE.getSeparator() + "mv score" + INSTANCE.getSeparator() + "mv mcc").forEach(res::append);
         res.append("\n");
         return res;
-    }
+    }*/
 }

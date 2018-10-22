@@ -2,13 +2,12 @@ package jb.files.serialization
 
 import de.bwaldvogel.liblinear.Linear
 import de.bwaldvogel.liblinear.Model
+import jb.config.Constants.Companion.modelsPath
 import jb.config.Opts
 
 import java.io.File
 import java.io.IOException
 import java.util.ArrayList
-
-import jb.config.Constants.modelsPath
 
 class ModelReader {
 
@@ -16,7 +15,7 @@ class ModelReader {
         val modelsDir = File(modelsPath)
         val clfs = ArrayList<Model>()
         for (file in modelsDir.listFiles()!!) {
-            if (isRightData(opts, file) && hasRightAmountOfBaseClfs(opts, file) && !inPermutation(Integer.valueOf(file.name.split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]), opts.permutation!!)) {
+            if (isRightData(opts, file) && hasRightAmountOfBaseClfs(opts, file) && !inPermutation(Integer.valueOf(file.name.split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]), opts.permutation)) {
                 try {
                     clfs.add(Linear.loadModel(file))
                 } catch (e: IOException) {

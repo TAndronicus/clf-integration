@@ -1,5 +1,7 @@
 package jb.converter;
 
+import jb.config.Constants;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,8 +10,6 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import static jb.config.Constants.convertedSourcesPath;
-import static jb.config.Constants.normalize;
 
 public class Normalizing2FeatureArff2LibSvmConverter {
 
@@ -27,7 +27,7 @@ public class Normalizing2FeatureArff2LibSvmConverter {
     }
 
     public static void convertFile(File file) throws IOException {
-        File root = new File(convertedSourcesPath);
+        File root = new File(Constants.convertedSourcesPath);
         if (!root.exists()) root.mkdir();
         List<String> lines = Files.readAllLines(Paths.get(file.getPath()));
         int valuesCounter = 0;
@@ -56,7 +56,7 @@ public class Normalizing2FeatureArff2LibSvmConverter {
             square[i] = Math.sqrt(square[i] / valuesCounter);
         }
         columns = selectFeatures(square);
-        try (PrintWriter printWriter = new PrintWriter(new File(convertedSourcesPath + "//" + file.getName().split("[.]")[0] + "_" + columns[0] + "_" +
+        try (PrintWriter printWriter = new PrintWriter(new File(Constants.convertedSourcesPath + "//" + file.getName().split("[.]")[0] + "_" + columns[0] + "_" +
                 columns[1] + "_converted." + file.getPath().split("[.]")[1]))) {
             int counter = 0;
             for (String line : lines) {
@@ -71,7 +71,7 @@ public class Normalizing2FeatureArff2LibSvmConverter {
                     if (i != columns[0] && i != columns[1]) {
                         continue;
                     }
-                    if (normalize) {
+                    if (Constants.normalize) {
                         newline.append(" " + (loopCounter + 1) + ":" + ((Double.valueOf(values[i].trim()) - average[i]) / square[i]));
                     } else {
                         newline.append(" " + (loopCounter + 1) + ":" + Double.valueOf(values[i].trim()));
