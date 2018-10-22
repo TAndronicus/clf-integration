@@ -14,7 +14,7 @@ data class Opts(val filePath: String, //Absolute path to file in LibSVM format
 ) {
 
     fun getFilename(): String {
-            val pathParts = this.filePath!!.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            val pathParts = this.filePath.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             val nameParts = pathParts[pathParts.size - 1].split("[.]".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             return nameParts[0]
     }
