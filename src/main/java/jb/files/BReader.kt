@@ -23,7 +23,7 @@ class BReader : FileHelper {
 
         val clfObjectsTables = prepareLists()
         for (bClfObject in clfObjects) {
-            clfObjectsTables[if (bClfObject.wt == 0) bClfObject.zb - 1 else 10].plus(ClfObjectDoubleSorted(bClfObject.x, bClfObject.y))
+            clfObjectsTables[if (bClfObject.wt == 0) bClfObject.zb - 1 else 10].add(ClfObjectDoubleSorted(bClfObject.x, bClfObject.y))
         }
         val problems = ArrayList<jb.data.Problem>()
         for (objectList in clfObjectsTables) {
@@ -40,8 +40,8 @@ class BReader : FileHelper {
         return Dataset(problems, xMin, xMax)
     }
 
-    private fun prepareLists(): List<List<ClfObject>> {
-        val lists = ArrayList<List<ClfObject>>()
+    private fun prepareLists(): ArrayList<ArrayList<ClfObject>> {
+        val lists = ArrayList<ArrayList<ClfObject>>()
         for (i in 0..10) {
             lists.add(ArrayList())
         }
@@ -88,8 +88,6 @@ class BReader : FileHelper {
                                    /**
                                     * `0` for training, `1` for testing
                                     */
-                                   val wt: Int) : ClfObjectDoubleSorted(x, y) {
-
-    }
+                                   val wt: Int) : ClfObjectDoubleSorted(x, y)
 
 }
