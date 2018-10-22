@@ -24,9 +24,9 @@ class MeanIntegrator : Integrator {
         x[opts.numberOfSpaceParts] = dataset.maxX
         for (i in 0 until opts.numberOfSpaceParts) {
             val selectedClfs = getSelectedClfs(clfs, selectedTuple.indices[i])
-            val `as` = getAs(selectedClfs)
+            val az = getAs(selectedClfs)
             val bs = getBs(selectedClfs)
-            a[i] = MathUtils.vectorProduct(`as`, selectedTuple.weights[i]) / MathUtils.vectorTrace(selectedTuple.weights[i])
+            a[i] = MathUtils.vectorProduct(az, selectedTuple.weights[i]) / MathUtils.vectorTrace(selectedTuple.weights[i])
             b[i] = MathUtils.vectorProduct(bs, selectedTuple.weights[i]) / MathUtils.vectorTrace(selectedTuple.weights[i])
             if (i != opts.numberOfSpaceParts - 1)
                 x[i + 1] = dataset.minX + (i + 1) * (dataset.maxX - dataset.minX) / opts.numberOfSpaceParts

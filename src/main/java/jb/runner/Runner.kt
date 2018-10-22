@@ -47,7 +47,7 @@ fun main(args: Array<String>) {
             val selectedTuple = selector.select(scoreTuple, opts)
             val integratedModel = integrator.integrate(selectedTuple, clfs, dataset, opts)
             val integratedScoreTester = IntegratedScoreTester()
-            scores[integratedScoreTester.test(integratedModel, validatingTestingTuple, opts)] = permutation
+            scores[integratedScoreTester.test(integratedModel, validatingTestingTuple)] = permutation
         }
         finalScores.add(scores.lastKey())
     }
