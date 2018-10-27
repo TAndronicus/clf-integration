@@ -1,5 +1,7 @@
 .idea/
+.gradle/
 target/
+gradle/
 src/main/resources/target/
 src/main/resources/models/
 src/main/resources/results/
