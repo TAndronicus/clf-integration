@@ -1,11 +1,8 @@
 package jb.tester
 
-import jb.config.Opts
 import jb.data.IntegratedModel
 import jb.data.ValidatingTestingTuple
 import jb.util.ModelUtils
-import lombok.Data
-
 import jb.util.ModelUtils.getIndexOfSubspace
 import jb.util.ModelUtils.switchConfMatColumns
 
