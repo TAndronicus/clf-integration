@@ -2,6 +2,7 @@
 .gradle/
 target/
 gradle/
+out/
 src/main/resources/target/
 src/main/resources/models/
 src/main/resources/results/
