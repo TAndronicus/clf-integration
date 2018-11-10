@@ -59,3 +59,4 @@ fun main(args: Array<String>) {
     println(finalScores.last())
 
 }
+
