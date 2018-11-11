@@ -28,7 +28,7 @@ fun main(args: Array<String>) {
     val data = session
             .read()
             .format("libsvm")
-            .load("src/main/resources/target/1_0_1_converted.csv")
+            .load("/home/jb/Downloads/test1.txt")
 
 // Index labels, adding metadata to the label column.
 // Fit on whole dataset to include all labels in index.
@@ -65,7 +65,7 @@ fun main(args: Array<String>) {
             .setStages(arrayOf(labelIndexer, featureIndexer, dt, labelConverter))
 
 // Train model. This also runs the indexers.
-    val model = pipeline.fit(trainingData)
+    val model = pipeline.fit(data)
 
 // Make predictions.
     val predictions = model.transform(testData)
